@@ -1,0 +1,8 @@
+[submodule "Clipper"]
+	path = Clipper
+	url = https://github.com/eppz/Clipper
+	branch = Release
+[submodule "Triangle.NET"]
+	path = Triangle.NET
+	url = https://github.com/eppz/Triangle.NET
+	branch = Release
