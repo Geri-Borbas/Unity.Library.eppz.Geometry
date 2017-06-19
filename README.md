@@ -1,4 +1,4 @@
-# eppz! <sub>Geometry</sub>
+# eppz! <sup>Geometry</sup>
 > part of [**Unity.Library.eppz**](https://github.com/eppz/Unity.Library.eppz)
 
 **📐 2D geometry for Unity.**
