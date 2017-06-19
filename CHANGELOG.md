@@ -1,5 +1,16 @@
-# eppz.Meshes
+# eppz.Geometry
 
+* 0.5.0
+
+	+ Added the root `Geometry.cs` static class
+	+ Added `Vector2` / `Vector3` extensions
+	+ Added `AddOns` (yet disabled)
+	+ Added `Components`
+	+ Added `Editor` scripts
+	+ Added `Model` classes
+	+ Added regions, XML-Doc summaries
+	+ Update `README.md`
+	
 * 0.0.2
 
 	+ Added `Clipper` submodule
