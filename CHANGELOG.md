@@ -1,4 +1,10 @@
-# eppz.Geometry
+# eppz! <sub>Geometry</sub>
+
+* 0.5.1
+
+	+ Added `Lines` (renderer classes)
+	+ Added `Scenes`
+		+ Yet with a single scene `0. Polygon-point containment`
 
 * 0.5.0
 

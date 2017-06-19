@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright (c) 2017 Geri Borbás http://www.twitter.com/_eppz
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -7,41 +7,55 @@
 //
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Serialization;
 
 
-namespace EPPZ.Geometry.Components
+namespace EPPZ.Geometry.Scenes
 {
 
 
-	public class PolygonSource : MonoBehaviour
+	using Components;
+	using Lines;
+
+
+	/// <summary>
+	/// 0. Polygon-point containment
+	/// </summary>
+	public class Controller_0 : MonoBehaviour
 	{
 
 
-		public Transform[] pointTransforms;
-		public Polygon.WindingDirection windingDirection = Polygon.WindingDirection.Unknown;
-		[Range (-2,2)] public float offset = 0.0f;
-		public bool updateModel = false;
+		public Color defaultColor;
+		public Color passingColor;
 
-		public Polygon polygon;
+		public PolygonSource polygonSource;
+		public GameObject[] pointObjects;
+		public PolygonLineRenderer polygonRenderer;
 
-
-		void Awake()
-		{
-			// Construct a polygon model from transforms (if not created by a root polygon already).
-			if (polygon == null) polygon = Polygon.PolygonWithSource(this);
-			if (offset != 0.0f) polygon = polygon.OffsetPolygon(offset);
-		}
+		Polygon polygon { get { return polygonSource.polygon; } }
+			
 
 		void Update()
+		{ RenderTestResult(PointContainmentTest()); }
+
+		bool PointContainmentTest()
 		{
-			if (updateModel)
+			bool containsAllPoints = true;
+			foreach (GameObject eachPointObject in pointObjects)
 			{
-				// Update polygon model with transforms, also update calculations.
-				polygon.UpdatePointPositionsWithSource(this);
-				windingDirection = polygon.windingDirection;
-				if (offset != 0.0f) polygon = polygon.OffsetPolygon(offset);
+				Vector2 eachPoint = eachPointObject.transform.position.xy();
+				containsAllPoints &= polygon.ContainsPoint(eachPoint);
 			}
+			return containsAllPoints;
+		}
+		
+		void RenderTestResult(bool testResult)
+		{
+			Color color = (testResult) ? passingColor : defaultColor;
+
+			// Layout colors.
+			polygonRenderer.lineColor = color;
+			foreach (GameObject eachPointObject in pointObjects)
+			{ eachPointObject.GetComponent<Renderer>().material.color = color; }
 		}
 	}
 }

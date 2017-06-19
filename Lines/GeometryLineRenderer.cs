@@ -1,47 +1,48 @@
-//
+﻿//
 // Copyright (c) 2017 Geri Borbás http://www.twitter.com/_eppz
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 //  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+#if EPPZ_LINES
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Serialization;
 
 
-namespace EPPZ.Geometry.Components
+namespace EPPZ.Geometry.Lines
 {
 
 
-	public class PolygonSource : MonoBehaviour
+	using EPPZ.Lines;
+
+
+	public class GeometryLineRenderer : DirectLineRenderer
 	{
 
 
-		public Transform[] pointTransforms;
-		public Polygon.WindingDirection windingDirection = Polygon.WindingDirection.Unknown;
-		[Range (-2,2)] public float offset = 0.0f;
-		public bool updateModel = false;
+		protected void DrawSegment(Segment segment, Color color)	
+		{ DrawLine(segment.a, segment.b, color); }
 
-		public Polygon polygon;
+		protected void DrawPolygon(Polygon polygon, Color color)
+		{ polygon.EnumerateEdgesRecursive((Edge eachEdge) => DrawLine(eachEdge.a, eachEdge.b, color)); }
 
+		protected void DrawPolygonWithTransform(Polygon polygon, Color color, Transform transform_)
+		{ DrawPolygonWithTransform(polygon, color, transform_, false); }
 
-		void Awake()
+		protected void DrawPolygonWithTransform(Polygon polygon, Color color, Transform transform_, bool drawNormals)
 		{
-			// Construct a polygon model from transforms (if not created by a root polygon already).
-			if (polygon == null) polygon = Polygon.PolygonWithSource(this);
-			if (offset != 0.0f) polygon = polygon.OffsetPolygon(offset);
-		}
-
-		void Update()
-		{
-			if (updateModel)
+			polygon.EnumerateEdgesRecursive((Edge eachEdge) =>
 			{
-				// Update polygon model with transforms, also update calculations.
-				polygon.UpdatePointPositionsWithSource(this);
-				windingDirection = polygon.windingDirection;
-				if (offset != 0.0f) polygon = polygon.OffsetPolygon(offset);
-			}
+				DrawLineWithTransform(eachEdge.a, eachEdge.b, color, transform_);
+				if (drawNormals)
+				{
+					Vector2 halfie = eachEdge.a + ((eachEdge.b - eachEdge.a) / 2.0f);
+					DrawLineWithTransform(halfie, halfie + eachEdge.normal * 0.1f, color, transform_);
+				}
+			});
 		}
 	}
 }
+#endif
+
