@@ -1,15 +1,33 @@
 # eppz.Geometry
 > part of [**Unity.Library.eppz**](https://github.com/eppz/Unity.Library.eppz)
 
-📐 2D geometry for Unity.
+**📐 2D geometry for Unity.**
 
-Polygon triangulation, Delunay triangulation, Voronoi, polygon offset, polygon outline, union of polygons, substraction of polygons. polygon clipping, polygon winding direction, polygon area, polygon centroid, centroid of multiple polygons, line intersection, point-line distance, segment intersection, polygon-point containment, and more.
+Polygon triangulation, Voronoi diagram, polygon offset, polygon outline, union of polygons, substraction of polygons. polygon clipping, polygon winding direction, polygon area, polygon centroid, centroid of multiple polygons, line intersection, point-line distance, segment intersection, polygon-point containment, and more.
 
-The library is **being used in production**. However, it comes with the disclaimed liability and warranty of [MIT License](https://en.wikipedia.org/wiki/MIT_License)).
+The library is **being used in production**. However, it comes with the disclaimed liability and warranty of [MIT License](https://en.wikipedia.org/wiki/MIT_License).
+
+## Examples
+
+If you prefer to read example code immediately, you can find example scenes in [`Scenes`](Scenes) folder.
+
+## Model classes
+
+* [`Vertex.cs`](Model/Vertex.cs)
+	+ Basically a `Vector2` point, but is aware of the polygon context it resides (neighbours, segments, edges, polygon, bisector, normal).
+* [`Segment.cs`](Model/Segment.cs)
+	+ Segment of two `Vector2` point. Carries out basic geometry features (point distance, point containment, segment intersection).
+* [`Edge.cs`](Model/Edge.cs)
+	+ Edge of two `Vertex` in a polygon (a special `Segment` subclass). Likewise vertices, this model is also aware of the polygon context it resides (neighbours, segments, edges, polygon, perpendicular, normal).
+* [`Polygon.cs`](Model/Edge.cs)
+	+ The role player, it really **embodies mostly every feature of this library**. Basically a polygon made of vertices.
+	+ Can be created with point array, transforms, [`PolygonSource`](Components/PolygonSource.cs). Further polygons can be embedded into recursively. Vertices, edges, polygons can be enumerated (recursively).
+	+ Area, winding direction, centroid are being calculated. Also carries the basic geometry features (point containment, line-, segment-, polygon intersection and more).
+	+ Using library modules, it implements polygon offset (outline), union polygon (polygon clipping), basic mesh triangulation. It implements conversion to both [Clipper](https://github.com/eppz/Clipper) and [Triangle.NET](https://github.com/eppz/Triangle.NET), so you can implement further integration with those (awesome) libraries.
 
 ## [`Geometry.cs`](Geometry.cs)
 
-The basic 2D geometry algorithm collection is implemented in this static base class.
+Most of the basic 2D geometry algorithm collection is implemented in this static base class. You can (mostly) **use them with Unity `Vector2` types directly**, so (almost entirely) without the model classes introduced above.
 
 * **Point**
 	+ `bool ArePointsEqualWithAccuracy(Vector2 a, Vector2 b, float accuracy)`
