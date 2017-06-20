@@ -9,7 +9,6 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
 using System.Linq;
 using ClipperLib;
 
@@ -35,12 +34,11 @@ namespace EPPZ.Geometry
 		public string name;
 
 		// Windings.
-		[HideInInspector] public enum WindingDirection { Unknown, CCW, CW };
-		private WindingDirection _windingDirection = WindingDirection.Unknown;
-		public WindingDirection windingDirection { get { return _windingDirection; } }
-		public bool isCW { get { return (_windingDirection == WindingDirection.CW); } }
-		public bool isCCW { get { return (_windingDirection == WindingDirection.CCW); } }
-
+		public bool isCW { get { return (Mathf.Sign(_area) < 0.0f); } }
+		public bool isCCW { get { return (Mathf.Sign(_area) > 0.0f); } }		
+		public enum Winding { CCW, CW };		
+		public Winding winding { get { return (isCCW) ? Winding.CCW : Winding.CW; } }
+		
 		/// <remarks>
 		/// For internal use.
 		/// Edge, Vertex class can read from this directly
@@ -57,11 +55,8 @@ namespace EPPZ.Geometry
 		private Rect _bounds = new Rect();
 		public Rect bounds { get { return _bounds; } }
 
-		private float _area;
+		private float _area = 0.0f;
 		public float area { get { return _area; } }
-
-		private float _signedArea;
-		public float signedArea { get { return _signedArea; } }
 
 		// Yet for single polygons only (see centroid of compound polygons).
 		private Vector2 _centroid;
@@ -75,7 +70,7 @@ namespace EPPZ.Geometry
 
 		public static Polygon PolygonWithSource(PolygonSource polygonSource)
 		{
-			Polygon rootPolygon = Polygon.PolygonWithPointTransforms(polygonSource.pointTransforms, polygonSource.windingDirection);
+			Polygon rootPolygon = Polygon.PolygonWithPointTransforms(polygonSource.pointTransforms);
 
 			// Collect sub-olygons if any.
 			foreach (Transform eachChildTransform in polygonSource.gameObject.transform)
@@ -112,10 +107,7 @@ namespace EPPZ.Geometry
 			return rootPolygon;
 		}
 
-		public static Polygon PolygonWithPointTransforms(Transform[] pointTransforms)
-		{ return PolygonWithPointTransforms(pointTransforms, WindingDirection.Unknown); }
-
-		public static Polygon PolygonWithPointTransforms(Transform[] pointTransforms, WindingDirection windingDirection) // Uses Transform.localPosition.xy()
+		public static Polygon PolygonWithPointTransforms(Transform[] pointTransforms) // Uses Transform.localPosition.xy()
 		{
 			// Create points array.
 			Vector2[] points = new Vector2[pointTransforms.Length];
@@ -125,19 +117,13 @@ namespace EPPZ.Geometry
 				points[index] = eachPointTransform.localPosition.xy();
 			}
 			
-			return Polygon.PolygonWithPoints(points, windingDirection);
+			return Polygon.PolygonWithPoints(points);
 		}
 
 		public static Polygon PolygonWithPoints(Vector2[] points)
-		{ return PolygonWithPoints(points, WindingDirection.Unknown); }
-
-		public static Polygon PolygonWithPoints(Vector2[] points, WindingDirection windingDirection)
-		{ return PolygonWithPoints(points, 0.0f, windingDirection); }
+		{ return PolygonWithPoints(points, 0.0f); }
 
 		public static Polygon PolygonWithPoints(Vector2[] points, float angle)
-		{ return PolygonWithPoints(points, angle, WindingDirection.Unknown); }
-
-		public static Polygon PolygonWithPoints(Vector2[] points, float angle, WindingDirection windingDirection)
 		{
 			Polygon polygon = new Polygon(points.Length);
 
@@ -151,10 +137,7 @@ namespace EPPZ.Geometry
 			}
 
 			// Polygon calculations.
-			polygon.CalculateBounds();
-			polygon.CalculateArea();
-			polygon.CalculateWindingDirectionIfNeeded();
-			polygon.CalculateCentroid();
+			polygon.Calculate();
 
 			// Create members.
 			polygon.CreateVerticesFromPoints();
@@ -189,11 +172,7 @@ namespace EPPZ.Geometry
 			}
 
 			// Polygon calculations.
-			CalculateBounds();
-			CalculateArea();
-			CalculateCentroid();
-			_windingDirection = WindingDirection.Unknown;
-			CalculateWindingDirectionIfNeeded();
+			Calculate();
 		}
 
 		public void AddPolygon(Polygon polygon)
@@ -201,9 +180,7 @@ namespace EPPZ.Geometry
 			polygons.Add(polygon);
 
 			// Polygon calculations.
-			CalculateBounds();
-			CalculateArea();
-			CalculateCentroid();
+			Calculate();
 		}
 
 	#endregion
@@ -330,7 +307,14 @@ namespace EPPZ.Geometry
 
 	#region Polygon calculations
 
-		private void CalculateBounds()
+		void Calculate()
+		{
+			_CalculateBounds();
+			_CalculateArea();
+			_CalculateCentroid();
+		}
+
+		void _CalculateBounds()
 		{
 			float left = float.MaxValue; // Out in the right
 			float right = float.MinValue; // Out in the left
@@ -354,27 +338,15 @@ namespace EPPZ.Geometry
 			_bounds.yMax = top;
 		}
 
-		private void CalculateArea()
+		private void _CalculateArea()
 		{
 
 			// From https://en.wikipedia.org/wiki/Shoelace_formula
 			Vector2[] points_ = new Vector2[_points.Length + 1];
-			
-			// Create point list for calculations.
-			if (windingDirection == WindingDirection.CW)
-			{
-				Vector2[] reversed = new Vector2[_points.Length];
-				System.Array.Copy(_points, reversed, _points.Length);
-				System.Array.Copy(reversed, points_, _points.Length);
-			}
-			
-			if (windingDirection == WindingDirection.CCW ||
-				windingDirection == WindingDirection.Unknown)
-			{ System.Array.Copy(_points, points_, _points.Length); }
-			
+			System.Array.Copy(_points, points_, _points.Length);
 			points_[_points.Length] = _points[0];
 			
-			// Calculations.
+			// Calculate area.
 			float firstProducts = 0.0f;
 			float secondProducts = 0.0f;
 			for (int index = 0; index < points_.Length - 1; index++)
@@ -385,27 +357,17 @@ namespace EPPZ.Geometry
 				firstProducts += eachPoint.x * eachNextPoint.y;
 				secondProducts += eachPoint.y * eachNextPoint.x;
 			}
-			float area_ = (firstProducts - secondProducts) / 2.0f;
-			
-			// Set signed area.
-			_signedArea = area_;
-
-			// Set area.
-			_area = Mathf.Abs(area_);
+			float _area = (firstProducts - secondProducts) / 2.0f;
 
 			// Add / Subtract sub-polygon areas.
-			float subPolygonAreas = 0.0f;
 			foreach (Polygon eachPolygon in polygons)
 			{
 				// Outer or inner polygon (supposing there is no self-intersection).
-				float subPolygonArea = eachPolygon.CalculatedArea();
-				subPolygonAreas += (eachPolygon.windingDirection == windingDirection) ? subPolygonArea : -subPolygonArea;
+				_area += eachPolygon.area;
 			}
-
-			_area = _area + subPolygonAreas;
 		}
 
-		private void CalculateCentroid()
+		private void _CalculateCentroid()
 		{
 			// Enumerate points.
 			float Σx = 0.0f;
@@ -422,26 +384,6 @@ namespace EPPZ.Geometry
 
 			// Assign.
 			_centroid = new Vector2(x, y);
-		}
-		
-		private float CalculatedArea()
-		{
-			CalculateArea();
-			return _area;
-		}
-
-		private Vector2 CalculatedCentroid()
-		{
-			CalculateCentroid();
-			return _centroid;
-		}
-
-		private void CalculateWindingDirectionIfNeeded()
-		{
-			if (_windingDirection == WindingDirection.Unknown) // Only if unknown
-			{
-				_windingDirection = (Mathf.Sign(_signedArea) > 0.0f) ? WindingDirection.CCW : WindingDirection.CW;
-			}
 		}
 
 		private void CreateVerticesFromPoints()
@@ -473,7 +415,7 @@ namespace EPPZ.Geometry
 			firstVertex.SetPreviousVertex(eachVertex);
 		}
 		
-		private void CreateEdgesConnectingPoints()
+		void CreateEdgesConnectingPoints()
 		{
 			// Enumerate vertices.
 			Edge eachEdge = null;
@@ -708,10 +650,9 @@ namespace EPPZ.Geometry
 		
 	#region Geometry features (Transformations)
 
-		public void RecalculateWindindDirection()
+		public void Reverse()
 		{
-			_windingDirection = WindingDirection.Unknown;
-			CalculateWindingDirectionIfNeeded();
+			// May be a feature later on (reverse `_points` using `System.Array.Copy()`.
 		}
 
 		public void AlignCentered()
@@ -736,9 +677,7 @@ namespace EPPZ.Geometry
 			}
 
 			// Polygon calculations.
-			CalculateBounds();
-			CalculateArea();
-			CalculateCentroid();
+			Calculate();
 
 			// Update (bounds).
 			// _bounds.position += translation;
@@ -762,9 +701,7 @@ namespace EPPZ.Geometry
 			}
 			
 			// Polygon calculations.
-			CalculateBounds();
-			CalculateArea();
-			CalculateCentroid();
+			Calculate();
 		}
 
 	#endregion

@@ -19,7 +19,6 @@ namespace EPPZ.Geometry.Components
 
 
 		public Transform[] pointTransforms;
-		public Polygon.WindingDirection windingDirection = Polygon.WindingDirection.Unknown;
 		[Range (-2,2)] public float offset = 0.0f;
 		public bool updateModel = false;
 
@@ -39,7 +38,6 @@ namespace EPPZ.Geometry.Components
 			{
 				// Update polygon model with transforms, also update calculations.
 				polygon.UpdatePointPositionsWithSource(this);
-				windingDirection = polygon.windingDirection;
 				if (offset != 0.0f) polygon = polygon.OffsetPolygon(offset);
 			}
 		}

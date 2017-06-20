@@ -24,12 +24,12 @@ namespace EPPZ.Geometry.Lines
 
 		public Color lineColor;
 		public Color boundsColor;
-		public GameObject windingDirectionObject;
+		public GameObject windingObject;
 		public TextMesh areaTextMesh;
 		public bool normals = false;
 
 		private float _previousArea;
-		private Polygon.WindingDirection _previousWindingDirection;
+		private Polygon.Winding _previousWindingDirection;
 
 		public Polygon polygon;
 		
@@ -47,12 +47,12 @@ namespace EPPZ.Geometry.Lines
 			if (polygon == null) return; // Only having polygon
 
 			// Layout winding direction object if any.
-			bool hasWindingDirectionObject = (windingDirectionObject != null);
-			bool windingChanged = (polygon.windingDirection != _previousWindingDirection);
+			bool hasWindingDirectionObject = (windingObject != null);
+			bool windingChanged = (polygon.winding != _previousWindingDirection);
 			if (hasWindingDirectionObject && windingChanged)
 			{
-				windingDirectionObject.transform.localScale = (polygon.isCW) ? Vector3.one : new Vector3 (1.0f, -1.0f, 1.0f);
-				windingDirectionObject.transform.rotation = (polygon.isCW) ? Quaternion.identity : Quaternion.Euler( new Vector3 (0.0f, 0.0f, 90.0f) );
+				windingObject.transform.localScale = (polygon.isCW) ? Vector3.one : new Vector3 (1.0f, -1.0f, 1.0f);
+				windingObject.transform.rotation = (polygon.isCW) ? Quaternion.identity : Quaternion.Euler( new Vector3 (0.0f, 0.0f, 90.0f) );
 			}
 
 			// Layout area text mesh if any.
@@ -64,7 +64,7 @@ namespace EPPZ.Geometry.Lines
 			}
 
 			// Track.
-			_previousWindingDirection = polygon.windingDirection;
+			_previousWindingDirection = polygon.winding;
 			_previousArea = polygon.area;
 		}
 

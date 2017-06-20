@@ -1,4 +1,15 @@
-# eppz! <sub>Geometry</sub>
+# eppz! `Geometry`
+
+* 0.5.5
+
+	+ Only calculated winding direction
+		+ Removed option to define polygon winding
+		+ Removed distinct `_signedArea`
+			+ `area` is always (!) signed
+		+ Polygon calculations grouped together 
+		+ Renamed to simply `winding`
+	+ `Geometry`
+		+ `CentroidOfPolygons` use `area` directly (being always signed)
 
 * 0.5.1
 
