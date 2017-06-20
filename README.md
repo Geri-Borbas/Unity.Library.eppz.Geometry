@@ -59,6 +59,14 @@ Most of the basic 2D geometry algorithm collection is implemented in this static
 	+ `Vector2 CentroidOfPolygons(Polygon[] polygons, Polygon.WindingDirection windingDirection = Polygon.WindingDirection.Unknown)`
 		+ Returns the compound centroid of multiple polygon using [Geometric decomposition](https://en.wikipedia.org/wiki/Centroid#By_geometric_decomposition).
 
+## Segment point containment methods
+
+**Points contained by a segment** (even edge or polygon circumfence) should be calculated with a given **accuracy**. This accuracy is set to `1e-6f` by default, but **can be set to any value** per each containment test. For example, you may want to set accuracy to 1f, if testing containment to a 1 pixel width segment.
+
+Point containment tests has two **containment method**, `ContainmentMethod.Default` and `ContainmentMethod.Precise`. The former is less computation intensive than the latter. Depending on your ue case, you may trade precision over performance. The figure below summarizes the dissimilarities of the two method.
+
+![Unity.Library.eppz.Geometry.Segment.ContainsPoint.ContainmentMethod](https://github.com/eppz/Unity.Library.eppz.Geometry/raw/Documentation/Documentation/Unity.Library.eppz.Geometry.Segment.ContainsPoint.ContainmentMethod.png)
+
 ## Modules
 
 For clipping, offsetting, triangulating the library use these brilliant third party `C#` libraries below.
