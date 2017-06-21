@@ -1,11 +1,16 @@
 # eppz! `Geometry`
 > part of [**Unity.Library.eppz**](https://github.com/eppz/Unity.Library.eppz)
 
-
 ## Test scenes
 
 + [Polygon-Point containment](#0-polygon-point-containment)
 + [Polygon-Segment intersection test](#1-polygon-segment-intersection)
++ [Polygon permiter-Point containment (Precise)](#2-polygon-permiter-point-containment-precise)
++ [Polygon permiter-Point containment (Default)](#3-polygon-permiter-point-containment-default)
++ [Polygon-Segment containment](#4-polygon-segment-containment)
++ [Polygon-Polygon containment](#5-polygon-polygon-containment)
++ [Vertex facing](#6-vertex-facing)
++ [Polygon area, Polygon winding](#7-polygon-area-polygon-facing)
 
 These test scenes are designed to experience / proof the **eppz! Geometry** library features. Hit play, then manipulate the geometry in Scene window while in game mode (watch out to move the points directly instead their parent container). Every relevant code is in the corresponding `Controller_#.cs`, so you can see **how to use the API**.
 
@@ -25,8 +30,7 @@ The star polygon drawn yellow when it contains all three points.
 ```C#
 bool test = polygon.ContainsPoint(point);
 ```
-See [`Controller_0.cs`](Controllers/Controller_0,cs) for the full script context.
-
+See [`Controller_0.cs`](Controllers/Controller_0.cs) for the full script context.
 
 ## 1. Polygon-Segment intersection
 
@@ -38,10 +42,9 @@ The star polygon drawn yellow when any of the two segments intersects any polygo
 ```C#
 bool test = polygon.IsIntersectingWithSegment(segment);
 ```
-See [`Controller_1.cs`](Controllers/Controller_1,cs) for the full script context.
+See [`Controller_1.cs`](Controllers/Controller_1.cs) for the full script context.
 
-
-## 2. Polygon permiter-Point containment (Precise)
+## 2. Polygon permiter-Point containment (Precise)2-polygon-permiter-point-containment-precise
 
 The star polygon drawn yellow when the point is contained by the polygon permiter. Accuracy means the line width of the polygon permiter (is `1.0f` by default).
 
@@ -51,7 +54,7 @@ The star polygon drawn yellow when the point is contained by the polygon permite
 ```C#
 bool test = polygon.PermiterContainsPoint(point, accuracy, Segment.ContainmentMethod.Precise);
 ```
-See [`Controller_2.cs`](Controllers/Controller_2,cs) for the full script context.
+See [`Controller_2.cs`](Controllers/Controller_2.cs) for the full script context.
 
 **Points contained by a segment** (even edge or polygon permiter) should be calculated with a given **accuracy**. This accuracy is set to `1e-6f` by default, but **can be set to any value** per each containment test (like above).
 
@@ -66,12 +69,11 @@ Actually the same as before, but a smaller accuracy is given (`0.1f`). The star 
 + Returns true even if the point appears to be on a polygon edge
 + Returns true even if the point is at a polygon vertex
 
-Usage:
 ```C#
 float accuracy = 0.1f;	
 bool test = polygon.PermiterContainsPoint(point, accuracy);
 ```
-See [`Controller_3.cs`](Controllers/Controller_3,cs) for the full script context.
+See [`Controller_3.cs`](Controllers/Controller_3.cs) for the full script context.
 
 ## 4. Polygon-Segment containment
 
@@ -80,7 +82,7 @@ The star drawn yellow when it contains both edge. This is a compund test of poly
 + Returns true even if the point appears to be on a polygon edge (thanks to permiter test)
 + Returns true even if the point is at a polygon vertex (thanks to permiter test)
 
-See [`Controller_4.cs`](Controllers/Controller_4,cs) for the full script context.
+See [`Controller_4.cs`](Controllers/Controller_4.cs) for the full script context.
 
 ## 5. Polygon-Polygon containment
 
@@ -91,11 +93,38 @@ A polygon contains another polygon, when
 + other polygon segments are not intersecting with polygon
 + other polygon vertices are not contained by polygon permiter
 
-See [`Controller_5.cs`](Controllers/Controller_5,cs) for the full script context.
+See [`Controller_5.cs`](Controllers/Controller_5.cs) for the full script context.
 
-Among some other orientation normalizer stuff, this is the core of tangram! puzzle solving engine, so it is proven by millions of gameplay hours.
+## 6. Vertex facing
 
+The segments in ths example can think of imaginary polygon edges. The corner vertex normal segment drawn yellow when it faces inward the imaginary polygon, drawn white when facing outward.
 
+It uses `Segment.IsPointLeft()` to create a compund test with both segments. It full calculation goes like below.
+
+The two segments encompasses an acute angle if
++ the endpoint of the second segment lies on the left of the first segment
+
+The vertex normal facing outward if
++ the neighbouring segment encompasses an acute angle
+	+ and the normal point lies on the left of both segments
++ or the neighbouring segments encompass an obtuse angle
+	+ and the normal point lies on the left of one of the segments
+
+See [`Controller_6.cs`](Controllers/Controller_6.cs) for the full script context.
+
+## 7. Polygon area, Polygon winding
+
+The winding direction of a polygon comes to a good use when you want to validate the result of further polygon operations. The `winding` property of each `Polygon` instance gets calculated at construction time, and each time its topology gets updated (using `UpdatePointPositionsWithSource()`, `UpdatePointPositionsWithTransforms()`, `Scale()`, `Translate()`), or you can invoke `Calculate()` directly if you manipulated underlying point models directly.
+
+In this scene you can see how area and winding of a polygon gets calculated. Just hit play and nudge some points around.
+
+```C#
+// After a polygon constructed, you can simply access values.
+float area = polygon.area;
+bool isCW = polygon.isCW;
+```
+
+See [`Model/Polygon.cs`](Model/Polygon.cs) source for the details.
 
 ## License
 

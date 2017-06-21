@@ -39,6 +39,50 @@ namespace EPPZ.Geometry
 			set { _b = value; }
 		}
 
+	#region Calculations
+
+		// If `alwaysCalculate` is on, every `normal` and `perpendicular` property access invokes recalculation of values based on actual topology.
+		public bool alwaysCalculate = true;
+
+		private Vector2 _normal;
+		public Vector2 normal
+		{
+			get
+			{
+				if (_normal == Vector2.zero || alwaysCalculate) { CalculateNormal(); } // Lazy calculation or force calculate on every access
+				return _normal;
+			}
+
+			set
+			{ _normal = value; }
+		}
+
+		public Vector2 _perpendicular;
+		public Vector2 perpendicular
+		{
+			get
+			{
+				if (_perpendicular == Vector2.zero || alwaysCalculate) { CalculatePerpendicular(); } // Lazy calculation or force calculate on every access
+				return _perpendicular;
+			}
+			
+			set
+			{ _perpendicular = value; }
+		}
+
+		public void CalculateNormal()
+		{
+			_normal = this.perpendicular.normalized;
+		}
+		
+		public void CalculatePerpendicular()
+		{
+			Vector2 translated = (this.b - this.a); // Translate to origin
+			_perpendicular = new Vector2( -translated.y, translated.x); // Rotate CCW
+		}
+
+	#endregion
+
 		
 	#region Factories
 		

@@ -11,6 +11,15 @@ The library is **being used in production**. However, it comes with the disclaim
 
 If you prefer to read example code immediately, you can find example scenes in [`Scenes`](Scenes) folder.
 
++ [Polygon-Point containment](Scenes/README.md/#0-polygon-point-containment)
++ [Polygon-Segment intersection test](Scenes/README.md/#1-polygon-segment-intersection)
++ [Polygon permiter-Point containment (Precise)](Scenes/README.md/#2-polygon-permiter-point-containment-precise)
++ [Polygon permiter-Point containment (Default)](Scenes/README.md/#3-polygon-permiter-point-containment-default)
++ [Polygon-Segment containment](Scenes/README.md/#4-polygon-segment-containment)
++ [Polygon-Polygon containment](Scenes/README.md/#5-polygon-polygon-containment)
++ [Vertex facing](Scenes/README.md/#6-vertex-facing)
++ [Polygon area, Polygon winding](Scenes/README.md/#7-polygon-area-polygon-facing)
+
 ## Model classes
 
 * [`Vertex.cs`](Model/Vertex.cs)

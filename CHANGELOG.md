@@ -1,5 +1,13 @@
 # eppz! `Geometry`
 
+* 0.7.0
+
+	+ Test scenes
+		`4. Polygon-Segment containment`
+		`5. Polygon-Polygon containment`
+		`6. Vertex facing`
+		`7. Polygon area, Polygon winding`
+
 * 0.6.0
 
 	+ Test scenes

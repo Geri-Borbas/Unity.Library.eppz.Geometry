@@ -24,6 +24,16 @@ namespace EPPZ.Geometry.Lines
 		protected void DrawSegment(Segment segment, Color color)	
 		{ DrawLine(segment.a, segment.b, color); }
 
+		protected void DrawSegment(Segment segment, Color color, bool drawNormals)
+		{
+			DrawLine(segment.a, segment.b, color);
+			if (drawNormals)
+			{
+				Vector2 halfie = segment.a + ((segment.b - segment.a) / 2.0f);
+				DrawLine(halfie, halfie + segment.normal * 0.1f, color);
+			}
+		}
+		
 		protected void DrawPolygon(Polygon polygon, Color color)
 		{ polygon.EnumerateEdgesRecursive((Edge eachEdge) => DrawLine(eachEdge.a, eachEdge.b, color)); }
 

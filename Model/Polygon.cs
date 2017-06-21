@@ -307,7 +307,7 @@ namespace EPPZ.Geometry
 
 	#region Polygon calculations
 
-		void Calculate()
+		public void Calculate()
 		{
 			_CalculateBounds();
 			_CalculateArea();
@@ -357,7 +357,7 @@ namespace EPPZ.Geometry
 				firstProducts += eachPoint.x * eachNextPoint.y;
 				secondProducts += eachPoint.y * eachNextPoint.x;
 			}
-			float _area = (firstProducts - secondProducts) / 2.0f;
+			_area = (firstProducts - secondProducts) / 2.0f;
 
 			// Add / Subtract sub-polygon areas.
 			foreach (Polygon eachPolygon in polygons)

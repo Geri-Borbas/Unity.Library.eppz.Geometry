@@ -24,6 +24,7 @@ namespace EPPZ.Geometry.Lines
 
 		public Color lineColor;
 		public Color boundsColor;
+		public bool normals = false;
 		private Segment segment;
 		
 		
@@ -37,7 +38,7 @@ namespace EPPZ.Geometry.Lines
 		protected override void OnDraw()
 		{
 			DrawRect(segment.bounds, boundsColor);
-			DrawSegment(segment, lineColor);
+			DrawSegment(segment, lineColor, normals);
 		}
 	}
 }
