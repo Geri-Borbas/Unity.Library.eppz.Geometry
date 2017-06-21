@@ -107,14 +107,14 @@ namespace EPPZ.Geometry
 			return rootPolygon;
 		}
 
-		public static Polygon PolygonWithPointTransforms(Transform[] pointTransforms) // Uses Transform.localPosition.xy()
+		public static Polygon PolygonWithPointTransforms(Transform[] pointTransforms)
 		{
 			// Create points array.
 			Vector2[] points = new Vector2[pointTransforms.Length];
 			for (int index = 0; index < pointTransforms.Length; index++)
 			{
 				Transform eachPointTransform = pointTransforms[index];
-				points[index] = eachPointTransform.localPosition.xy();
+				points[index] = eachPointTransform.position.xy();
 			}
 			
 			return Polygon.PolygonWithPoints(points);
@@ -168,7 +168,7 @@ namespace EPPZ.Geometry
 			for (int index = 0; index < pointTransforms.Length; index++)
 			{
 				Transform eachPointTransform = pointTransforms[index];
-				_points[index] = eachPointTransform.localPosition.xy();
+				_points[index] = eachPointTransform.position.xy();
 			}
 
 			// Polygon calculations.

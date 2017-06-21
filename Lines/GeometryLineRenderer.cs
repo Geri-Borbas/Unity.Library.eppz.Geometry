@@ -27,6 +27,19 @@ namespace EPPZ.Geometry.Lines
 		protected void DrawPolygon(Polygon polygon, Color color)
 		{ polygon.EnumerateEdgesRecursive((Edge eachEdge) => DrawLine(eachEdge.a, eachEdge.b, color)); }
 
+		protected void DrawPolygon(Polygon polygon, Color color, bool drawNormals)
+		{
+			polygon.EnumerateEdgesRecursive((Edge eachEdge) =>
+			{
+				DrawLine(eachEdge.a, eachEdge.b, color);
+				if (drawNormals)
+				{
+					Vector2 halfie = eachEdge.a + ((eachEdge.b - eachEdge.a) / 2.0f);
+					DrawLine(halfie, halfie + eachEdge.normal * 0.1f, color);
+				}
+			});
+		}	
+
 		protected void DrawPolygonWithTransform(Polygon polygon, Color color, Transform transform_)
 		{ DrawPolygonWithTransform(polygon, color, transform_, false); }
 

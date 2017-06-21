@@ -59,6 +59,29 @@ Point containment tests has two **containment method**, `ContainmentMethod.Defau
 
 ![Unity.Library.eppz.Geometry.Segment.ContainsPoint.ContainmentMethod](https://github.com/eppz/Unity.Library.eppz.Geometry/raw/Documentation/Documentation/Unity.Library.eppz.Geometry.Segment.ContainsPoint.ContainmentMethod.png)
 
+## 3. Polygon permiter-Point containment (Default)
+
+Actually the same as before, but a smaller accuracy is given (`0.1f`). The star polygon drawn yellow when the point appears to be on any polygon edge of at a polygon vertex.
+
++ Returns true even if the point appears to be on a polygon edge
++ Returns true even if the point is at a polygon vertex
+
+Usage:
+```C#
+float accuracy = 0.1f;	
+bool test = polygon.PermiterContainsPoint(point, accuracy);
+```
+See [`Controller_3.cs`](Controllers/Controller_3,cs) for the full script context.
+
+## 4. Polygon-Segment containment
+
+The star drawn yellow when it contains both edge. This is a compund test of polygon-point containment, polygon permiter-point containment, polygon-segment intersection.
+
++ Returns true even if the point appears to be on a polygon edge (thanks to permiter test)
++ Returns true even if the point is at a polygon vertex (thanks to permiter test)
+
+See [`Controller_4.cs`](Controllers/Controller_4,cs) for the full script context.
+
 
 ## License
 

@@ -73,7 +73,7 @@ namespace EPPZ.Geometry.Lines
 			if (polygon == null) return; // Only having polygon
 
 			DrawRect(polygon.bounds, boundsColor);
-			DrawPolygonWithTransform(polygon, lineColor, transform, normals);
+			DrawPolygon(polygon, lineColor, normals);
 		}
 	}
 }

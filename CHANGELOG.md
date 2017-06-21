@@ -1,5 +1,14 @@
 # eppz! `Geometry`
 
+* 0.5.8
+
+	+ Test scenes
+		+ `3. Polygon permiter-Point containment (Default)`
+		+ `4. Polygon-Segment containment`
+	+ Polygon / segment sources use world position (!) instead local
+	+ Line renderers use world positions as well (both segment and polygon)
+	+ Polygon and segment sources can be updated on `LateUpdate()`
+
 * 0.5.7
 
 	+ Test scene `2. Polygon permiter-Point containment (Precise)`
