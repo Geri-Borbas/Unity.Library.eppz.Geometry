@@ -1,7 +1,10 @@
-# eppz! <sub>Geometry</sub>
+# eppz! `Geometry`
 > part of [**Unity.Library.eppz**](https://github.com/eppz/Unity.Library.eppz)
 
 ## Test scenes
+
++ [Polygon-Point containment](#0-polygon-point-containment)
++ [Polygon-Segment intersection test](#1-polygon-segment-intersection)
 
 These test scenes are designed to experience / proof the **eppz! Geometry** library features. Hit play, then manipulate the geometry in Scene window while in game mode (watch out to move the points directly instead their parent container). Every relevant code is in the corresponding `Controller_#.cs`, so you can see **how to use the API**.
 
@@ -11,7 +14,7 @@ Another helper objects are **polygon line renderers** ([`Lines.PolygonLineRender
 
 Beside these helper classes, you can easily construct `Polygon` / `Segment` instances using simple `Vector2` inputs as well. Having these test scenes, you can easily provision the mechanism of each geometry feature even with your own polygons.
 
-## 0. Polygon-point containment
+## 0. Polygon-Point containment
 
 The star polygon drawn yellow when it contains all three points.
 
@@ -22,7 +25,21 @@ Usage:
 ```C#
 bool test = polygon.ContainsPoint(point);
 ```
-See [`Controller_0.cs`](Controllers/Controller_0,cs) for the full context.
+See [`Controller_0.cs`](Controllers/Controller_0,cs) for the full script context.
+
+## 1. Polygon-Segment intersection
+
+The star polygon drawn yellow when any of the two segments intersects any polygon edge.
+
++ Returns false when a segment endpoint appears to be on a polygon edge
++ Returns false when a segment endpoint is at a polygon vertex
+
+Usage:
+```C#
+bool test = polygon.IsIntersectingWithSegment(segment);
+```
+See [`Controller_1.cs`](Controllers/Controller_1,cs) for the full script context.
+
 
 ## License
 

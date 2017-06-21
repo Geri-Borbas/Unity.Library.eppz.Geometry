@@ -18,44 +18,46 @@ namespace EPPZ.Geometry.Scenes
 
 
 	/// <summary>
-	/// 0. Polygon-Point containment
+	/// 1. Polygon-Segment intersection
 	/// </summary>
-	public class Controller_0 : MonoBehaviour
+	public class Controller_1 : MonoBehaviour
 	{
 
 
 		public Color defaultColor;
-		public Color passingColor;
+		public Color passingColor;	
 
 		public PolygonSource polygonSource;
-		public GameObject[] pointObjects;
+		public SegmentSource segmentSourceA;
+		public SegmentSource segmentSourceB;
 		public PolygonLineRenderer polygonRenderer;
+		public SegmentLineRenderer segmentRendererA;
+		public SegmentLineRenderer segmentRendererB;
 
-		Polygon polygon { get { return polygonSource.polygon; } }
+		private Polygon polygon { get { return polygonSource.polygon; } }
+		private Segment segment_a { get { return segmentSourceA.segment; } }
+		private Segment segment_b { get { return segmentSourceB.segment; } }
 			
 
 		void Update()
-		{ RenderTestResult(PointContainmentTest()); }
+		{ RenderTestResult(SegmentIntersectingTest()); }
 
-		bool PointContainmentTest()
+		bool SegmentIntersectingTest()
 		{
-			bool containsAllPoints = true;
-			foreach (GameObject eachPointObject in pointObjects)
-			{
-				Vector2 eachPoint = eachPointObject.transform.position.xy();
-				containsAllPoints &= polygon.ContainsPoint(eachPoint);
-			}
-			return containsAllPoints;
+			return (
+				polygon.IsIntersectingWithSegment(segment_a) ||
+				polygon.IsIntersectingWithSegment(segment_b)
+			);
 		}
-		
+
 		void RenderTestResult(bool testResult)
 		{
 			Color color = (testResult) ? passingColor : defaultColor;
 
 			// Layout colors.
 			polygonRenderer.lineColor = color;
-			foreach (GameObject eachPointObject in pointObjects)
-			{ eachPointObject.GetComponent<Renderer>().material.color = color; }
+			segmentRendererA.lineColor = color;
+			segmentRendererB.lineColor = color;
 		}
 	}
 }

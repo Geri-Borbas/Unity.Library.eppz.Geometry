@@ -1,5 +1,9 @@
 # eppz! `Geometry`
 
+* 0.5.6
+
+	+ Test scene `1. Polygon-Segment intersection`
+
 * 0.5.5
 
 	+ Only calculated winding direction
