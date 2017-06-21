@@ -10,7 +10,7 @@
 + [Polygon-Segment containment](#4-polygon-segment-containment)
 + [Polygon-Polygon containment](#5-polygon-polygon-containment)
 + [Vertex facing](#6-vertex-facing)
-+ [Polygon area, Polygon winding](#7-polygon-area-polygon-facing)
++ [Polygon area, Polygon winding](#7-polygon-area-polygon-winding)
 
 These test scenes are designed to experience / proof the **eppz! Geometry** library features. Hit play, then manipulate the geometry in Scene window while in game mode (watch out to move the points directly instead their parent container). Every relevant code is in the corresponding `Controller_#.cs`, so you can see **how to use the API**.
 
@@ -44,7 +44,7 @@ bool test = polygon.IsIntersectingWithSegment(segment);
 ```
 See [`Controller_1.cs`](Controllers/Controller_1.cs) for the full script context.
 
-## 2. Polygon permiter-Point containment (Precise)2-polygon-permiter-point-containment-precise
+## 2. Polygon permiter-Point containment (Precise)
 
 The star polygon drawn yellow when the point is contained by the polygon permiter. Accuracy means the line width of the polygon permiter (is `1.0f` by default).
 

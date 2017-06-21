@@ -7,6 +7,11 @@
 		`5. Polygon-Polygon containment`
 		`6. Vertex facing`
 		`7. Polygon area, Polygon winding`
+	+ `Segment` (with `SegmentLineRenderer`)
+		+ Can now draw normals
+		+ `normal` and `perpendicular` calculations moved up from `Edge`
+	+ `Polygon`
+		+ Fixed `area` (so `winding`) calculations
 
 * 0.6.0
 

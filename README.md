@@ -18,7 +18,7 @@ If you prefer to read example code immediately, you can find example scenes in [
 + [Polygon-Segment containment](Scenes/README.md/#4-polygon-segment-containment)
 + [Polygon-Polygon containment](Scenes/README.md/#5-polygon-polygon-containment)
 + [Vertex facing](Scenes/README.md/#6-vertex-facing)
-+ [Polygon area, Polygon winding](Scenes/README.md/#7-polygon-area-polygon-facing)
++ [Polygon area, Polygon winding](Scenes/README.md/#7-polygon-area-polygon-winding)
 
 ## Model classes
 
