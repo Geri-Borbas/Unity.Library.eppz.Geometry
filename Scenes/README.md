@@ -82,6 +82,20 @@ The star drawn yellow when it contains both edge. This is a compund test of poly
 
 See [`Controller_4.cs`](Controllers/Controller_4,cs) for the full script context.
 
+## 5. Polygon-Polygon containment
+
+The star drawn yellow when it contain the rectangular polygon.  This is also a compund test of polygon-point containment, polygon-segment intersection, polygon permiter-point containment.
+
+A polygon contains another polygon, when
++ other polygon vertices are contained by polygon
++ other polygon segments are not intersecting with polygon
++ other polygon vertices are not contained by polygon permiter
+
+See [`Controller_5.cs`](Controllers/Controller_5,cs) for the full script context.
+
+Among some other orientation normalizer stuff, this is the core of tangram! puzzle solving engine, so it is proven by millions of gameplay hours.
+
+
 
 ## License
 

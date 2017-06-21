@@ -1,5 +1,11 @@
 # eppz! `Geometry`
 
+* 0.6.0
+
+	+ Test scenes
+		+ `5. Polygon-Polygon containment (1)`
+		+ `5. Polygon-Polygon containment (2)`
+
 * 0.5.9
 
 	+ Polygon / segment sources now can be updates on `Update` or `LateUpdate`
