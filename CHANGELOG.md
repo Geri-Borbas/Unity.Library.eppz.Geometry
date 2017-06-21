@@ -1,5 +1,9 @@
 # eppz! `Geometry`
 
+* 0.5.7
+
+	+ Test scene `2. Polygon permiter-Point containment (Precise)`
+
 * 0.5.6
 
 	+ Test scene `1. Polygon-Segment intersection`

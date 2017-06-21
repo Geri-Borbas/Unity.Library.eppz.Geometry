@@ -1,7 +1,7 @@
 # eppz! `Geometry`
 > part of [**Unity.Library.eppz**](https://github.com/eppz/Unity.Library.eppz)
 
-**📐 2D geometry for Unity.**
+**📐 2D geometry for Unity.** Suited for everyday polygon hassle.
 
 Polygon clipping, polygon winding direction, polygon area, polygon centroid, centroid of multiple polygons, line intersection, point-line distance, segment intersection, polygon-point containment, polygon triangulation, polygon Voronoi diagram, polygon offset, polygon outline, polygon buffer, polygon union, polygon substraction, polygon boolean operations, and more. It is a polygon fest.
 
@@ -61,7 +61,7 @@ Most of the basic 2D geometry algorithm collection is implemented in this static
 
 ## Segment point containment methods
 
-**Points contained by a segment** (even edge or polygon circumfence) should be calculated with a given **accuracy**. This accuracy is set to `1e-6f` by default, but **can be set to any value** per each containment test. For example, you may want to set accuracy to 1f, if testing containment to a 1 pixel width segment.
+**Points contained by a segment** (even edge or polygon permiter) should be calculated with a given **accuracy**. This accuracy is set to `1e-6f` by default, but **can be set to any value** per each containment test. For example, you may want to set accuracy to 1f, if testing containment to a 1 pixel width segment.
 
 Point containment tests has two **containment method**, `ContainmentMethod.Default` and `ContainmentMethod.Precise`. The former is less computation intensive than the latter. Depending on your ue case, you may trade precision over performance. The figure below summarizes the dissimilarities of the two method.
 

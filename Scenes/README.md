@@ -1,6 +1,7 @@
 # eppz! `Geometry`
 > part of [**Unity.Library.eppz**](https://github.com/eppz/Unity.Library.eppz)
 
+
 ## Test scenes
 
 + [Polygon-Point containment](#0-polygon-point-containment)
@@ -21,11 +22,11 @@ The star polygon drawn yellow when it contains all three points.
 + When points appear to be on a polygon edge, test will return false
 + When point is at a polygon vertex, test will return false
 
-Usage:
 ```C#
 bool test = polygon.ContainsPoint(point);
 ```
 See [`Controller_0.cs`](Controllers/Controller_0,cs) for the full script context.
+
 
 ## 1. Polygon-Segment intersection
 
@@ -34,11 +35,29 @@ The star polygon drawn yellow when any of the two segments intersects any polygo
 + Returns false when a segment endpoint appears to be on a polygon edge
 + Returns false when a segment endpoint is at a polygon vertex
 
-Usage:
 ```C#
 bool test = polygon.IsIntersectingWithSegment(segment);
 ```
 See [`Controller_1.cs`](Controllers/Controller_1,cs) for the full script context.
+
+
+## 2. Polygon permiter-Point containment (Precise)
+
+The star polygon drawn yellow when the point is contained by the polygon permiter. Accuracy means the line width of the polygon permiter (is `1.0f` by default).
+
++ Returns true even if the point appears to be on a polygon edge
++ Returns true even if the point is at a polygon vertex
+
+```C#
+bool test = polygon.PermiterContainsPoint(point, accuracy, Segment.ContainmentMethod.Precise);
+```
+See [`Controller_2.cs`](Controllers/Controller_2,cs) for the full script context.
+
+**Points contained by a segment** (even edge or polygon permiter) should be calculated with a given **accuracy**. This accuracy is set to `1e-6f` by default, but **can be set to any value** per each containment test (like above).
+
+Point containment tests has two **containment method**, `ContainmentMethod.Default` and `ContainmentMethod.Precise`. The former is less computation intensive than the latter. Depending on your ue case, you may trade precision over performance. The figure below summarizes the dissimilarities of the two method.
+
+![Unity.Library.eppz.Geometry.Segment.ContainsPoint.ContainmentMethod](https://github.com/eppz/Unity.Library.eppz.Geometry/raw/Documentation/Documentation/Unity.Library.eppz.Geometry.Segment.ContainsPoint.ContainmentMethod.png)
 
 
 ## License
