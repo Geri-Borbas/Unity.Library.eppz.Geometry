@@ -18,7 +18,9 @@ namespace EPPZ.Geometry.Components
 
 
 		public Transform[] pointTransforms;
-		public bool updateModel = false;
+
+		public enum UpdateMode { Awake, Update, LateUpdate };
+		public UpdateMode update = UpdateMode.Awake;	
 
 		public Segment segment;
 
@@ -28,14 +30,23 @@ namespace EPPZ.Geometry.Components
 			// Construct a segment model from transforms.
 			segment = Segment.SegmentWithSource(this);
 		}
-		
+
 		void Update()
 		{
-			if (updateModel)
-			{
-				// Update segment model with transforms, also update calculations.
-				segment.UpdateWithSource(this);
-			}
+			if (update == UpdateMode.Update)
+			{ UpdateModel(); }
+		}
+
+		void LateUpdate()
+		{
+			if (update == UpdateMode.LateUpdate)
+			{ UpdateModel(); }
+		}
+
+		void UpdateModel()
+		{
+			// Update segment model with transforms, also update calculations.
+			segment.UpdateWithSource(this);
 		}
 	}
 }

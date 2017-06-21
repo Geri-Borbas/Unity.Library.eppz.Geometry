@@ -10,6 +10,7 @@ using System.Collections;
 using UnityEngine.Serialization;
 
 
+
 namespace EPPZ.Geometry.Components
 {
 
@@ -20,7 +21,9 @@ namespace EPPZ.Geometry.Components
 
 		public Transform[] pointTransforms;
 		[Range (-2,2)] public float offset = 0.0f;
-		public bool updateModel = false;
+
+		public enum UpdateMode { Awake, Update, LateUpdate };
+		public UpdateMode update = UpdateMode.Awake;		
 
 		public Polygon polygon;
 
@@ -34,12 +37,21 @@ namespace EPPZ.Geometry.Components
 
 		void Update()
 		{
-			if (updateModel)
-			{
-				// Update polygon model with transforms, also update calculations.
-				polygon.UpdatePointPositionsWithSource(this);
-				if (offset != 0.0f) polygon = polygon.OffsetPolygon(offset);
-			}
+			if (update == UpdateMode.Update)
+			{ UpdateModel(); }
+		}
+
+		void LateUpdate()
+		{
+			if (update == UpdateMode.LateUpdate)
+			{ UpdateModel(); }
+		}
+
+		void UpdateModel()
+		{
+			// Update polygon model with transforms, also update calculations.
+			polygon.UpdatePointPositionsWithSource(this);
+			if (offset != 0.0f) polygon = polygon.OffsetPolygon(offset);
 		}
 	}
 }

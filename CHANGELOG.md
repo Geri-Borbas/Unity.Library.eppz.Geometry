@@ -1,5 +1,11 @@
 # eppz! `Geometry`
 
+* 0.5.9
+
+	+ Polygon / segment sources now can be updates on `Update` or `LateUpdate`
+	+ Test scenes
+		+ Updated update modes
+
 * 0.5.8
 
 	+ Test scenes
