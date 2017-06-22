@@ -83,6 +83,16 @@ For clipping, offsetting, triangulating the library use these brilliant third pa
 
 	+ Triangle.NET generates 2D (constrained) Delaunay triangulations and high-quality meshes of point sets or planar straight line graphs. It is a C# port by Christian Woltering of Jonathan Shewchuk's Triangle software. See standalone project repository [Triangle.NET](https://github.com/eppz/Triangle.NET) for details.
 
+## Add-ons
+
+* [`ClipperAddOns`](AddOns/ClipperAddOns.cs)
+	+ Mainly `Polygon` extensions for easy conversion between **eppz! Geometry** and [Clipper](https://github.com/eppz/Clipper). It has a method to convert from generic `Vector2[]` array. **[Clipper](https://github.com/eppz/Clipper) works with integers**. So conversion involves a scale up (and a scale down), thus you'll need to pass a scale value to Clipper. (`Polygon` internals use `10e+5f`).
+		+ `Polygon PolygonFromClipperPaths(Paths paths, float scale)`
+		+ `Polygon PolygonFromClipperPath(Path path, float scale)`
+		+ `Paths ClipperPaths(this Polygon this_, float scale)`
+		+ `Path ClipperPath(this Polygon this_, float scale)`
+		+ `Vector2[] PointsFromClipperPath(Path path, float scale)`
+
 ## License
 
 > Licensed under the [**MIT License**](https://en.wikipedia.org/wiki/MIT_License).

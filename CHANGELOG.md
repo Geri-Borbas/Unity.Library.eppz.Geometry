@@ -1,5 +1,9 @@
 # eppz! `Geometry`
 
+* 0.8.3
+
+	+ Added `ClipperAddOns`
+
 * 0.8.2
 
 	+ `PolygonSource`
