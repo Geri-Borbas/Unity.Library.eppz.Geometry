@@ -20,19 +20,21 @@ namespace EPPZ.Geometry.Components
 
 
 		public Transform[] pointTransforms;
-		[Range (-2,2)] public float offset = 0.0f;
+		public float offset = 0.0f;
 
 		public enum UpdateMode { Awake, Update, LateUpdate };
 		public UpdateMode update = UpdateMode.Awake;		
 
-		public Polygon polygon;
+		Polygon _polygon;
+		Polygon _offsetPolygon;		
+		public Polygon polygon { get { return (offset != 0.0f) ? _offsetPolygon : _polygon; } }
 
 
 		void Awake()
 		{
 			// Construct a polygon model from transforms (if not created by a root polygon already).
-			if (polygon == null) polygon = Polygon.PolygonWithSource(this);
-			if (offset != 0.0f) polygon = polygon.OffsetPolygon(offset);
+			if (_polygon == null) _polygon = Polygon.PolygonWithSource(this);
+			if (offset != 0.0f) _offsetPolygon = _polygon.OffsetPolygon(offset);
 		}
 
 		void Update()
@@ -50,8 +52,8 @@ namespace EPPZ.Geometry.Components
 		void UpdateModel()
 		{
 			// Update polygon model with transforms, also update calculations.
-			polygon.UpdatePointPositionsWithSource(this);
-			if (offset != 0.0f) polygon = polygon.OffsetPolygon(offset);
+			_polygon.UpdatePointPositionsWithSource(this);
+			if (offset != 0.0f) _offsetPolygon = _polygon.OffsetPolygon(offset);
 		}
 	}
 }

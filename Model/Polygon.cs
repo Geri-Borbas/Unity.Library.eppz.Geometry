@@ -80,7 +80,6 @@ namespace EPPZ.Geometry
 				if (eachChildPolygonSource != null)
 				{
 					Polygon eachSubPolygon = Polygon.PolygonWithSource(eachChildPolygonSource);
-					eachChildPolygonSource.polygon = eachSubPolygon; // Inject into source
 					rootPolygon.AddPolygon(eachSubPolygon);
 				}
 			}

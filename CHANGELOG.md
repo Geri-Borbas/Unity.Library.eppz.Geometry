@@ -1,5 +1,11 @@
 # eppz! `Geometry`
 
+* 0.8.2
+
+	+ `PolygonSource`
+		+ Offset now can be manipulated at runtime
+			+ Maintain the original polygon, so offset polygon can be recalculated any time
+
 * 0.8.0
 
 	+ Test scenes

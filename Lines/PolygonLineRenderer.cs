@@ -27,18 +27,23 @@ namespace EPPZ.Geometry.Lines
 		public bool normals = false;
 
 		public Polygon polygon;
+		PolygonSource polygonSource;		
 		
 		
 		void Start()
 		{
 			// Model reference.
-			PolygonSource polygonSource = GetComponent<PolygonSource>();
+			polygonSource = GetComponent<PolygonSource>();
+			
 			if (polygonSource != null)
 			{ polygon = polygonSource.polygon; }
 		}
 
 		protected override void OnDraw()
 		{
+			if (polygonSource != null)
+			{ polygon = polygonSource.polygon; }
+
 			if (polygon == null) return; // Only having polygon
 
 			DrawRect(polygon.bounds, boundsColor);
