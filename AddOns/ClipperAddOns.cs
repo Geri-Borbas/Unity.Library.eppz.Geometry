@@ -10,17 +10,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using System.Linq;
-using ClipperLib;
-
 
 namespace EPPZ.Geometry.AddOns
 {
 
 
+	using System.Linq;
+	using ClipperLib;
+
+
 	// Clipper definitions.
-	using Path = List<IntPoint>;
-	using Paths = List<List<IntPoint>>;
+	using Path = List<ClipperLib.IntPoint>;
+	using Paths = List<List<ClipperLib.IntPoint>>;
 
 
 	public static class ClipperAddOns

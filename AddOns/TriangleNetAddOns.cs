@@ -5,84 +5,73 @@
 //  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-// #define ADDONS_ENABLED
-#if ADDONS_ENABLED
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using System.Linq;
-using ClipperLib;
 
-using TriangleNet.Algorithm;
-using TriangleNet.Geometry;
-using TriangleNet.Data;
-using TriangleNet.Tools;
-using MeshExplorer.Generators;
-
-
-
-namespace EPPZ.Geometry
+namespace EPPZ.Geometry.AddOns
 {
-	
+
+
+	using System.Linq;
+	using ClipperLib;
+
+	using TriangleNet.Geometry;
 
 	// Clipper definitions.
-	using Path = List<IntPoint>;
-	using Paths = List<List<IntPoint>>;
+	using Path = List<ClipperLib.IntPoint>;
+	using Paths = List<List<ClipperLib.IntPoint>>;
 
 
-	public static class Geometry_TriangleNet
+	public static class TriangleNetAddOns
 	{
 		
 
 	#region Polygon
 
-		public static InputGeometry InputGeometry(this Polygon this_)
+		public static TriangleNet.Geometry.Polygon TriangleNetPolygon(this EPPZ.Geometry.Polygon this_)
 		{
-			InputGeometry geometry = new InputGeometry();
-			int boundary;
+			TriangleNet.Geometry.Polygon polygon = new TriangleNet.Geometry.Polygon();
 
-			// Add points.
-			boundary = 1;
-			int pointIndexOffset = 0;
-			this_.EnumeratePolygons((Polygon eachPolygon) =>
+			int boundary = 1;
+			List<TriangleNet.Geometry.Vertex> vertices = new List<TriangleNet.Geometry.Vertex>();
+			this_.EnumeratePolygons((EPPZ.Geometry.Polygon eachPolygon) =>
 			{
-				// Add points.
+				// Collect vertices.
+				vertices.Clear();
 				eachPolygon.EnumeratePoints((Vector2 eachPoint) =>
 				{
-					geometry.AddPoint(
+					vertices.Add(new Vertex(
 						(double)eachPoint.x,
 						(double)eachPoint.y,
-						boundary);
+						boundary
+					));
 				});
 
-				eachPolygon.EnumerateEdges((EPPZ.Geometry.Edge eachEdge) =>
-				{
-					int index_a = eachEdge.vertexA.index + pointIndexOffset;
-					int index_b = eachEdge.vertexB.index + pointIndexOffset;
-					geometry.AddSegment(index_a, index_b, boundary);
-				});
+				// Add controur.
+				polygon.Add(new Contour(vertices.ToArray(), boundary));
 
-				pointIndexOffset += eachPolygon.vertexCount; // Track point offsets.
+				// Track.
 				boundary++;
 			});
 
-			return geometry;
+			return polygon;
 		}
 
 	#endregion
 
 
-	#region Voronoi
+	#region Voronoi (beta 3)
 
-		public static Rect Bounds(this Voronoi this_)
+		public static Rect Bounds(this TriangleNet.Voronoi.Legacy.SimpleVoronoi this_)
 		{
 			float xmin = float.MaxValue;
 			float xmax = 0.0f;
 			float ymin = float.MaxValue;
 			float ymax = 0.0f;
-			foreach (VoronoiRegion region in this_.Regions)
+			foreach (TriangleNet.Voronoi.Legacy.VoronoiRegion region in this_.Regions)
 			{
 				foreach (Point eachPoint in region.Vertices)
 				{
@@ -93,6 +82,25 @@ namespace EPPZ.Geometry
 				}
 			}
 			return Rect.MinMaxRect(xmin, ymin, xmax, ymax);
+		}
+
+		public static Paths ClipperPathsFromVoronoiRegions(List<TriangleNet.Voronoi.Legacy.VoronoiRegion> voronoiRegions, float scale = 1.0f)
+		{
+			Paths paths = new Paths();
+
+			foreach (TriangleNet.Voronoi.Legacy.VoronoiRegion eachRegion in voronoiRegions)
+			{
+				Path eachPath = new Path();
+				foreach (Point eachPoint in eachRegion.Vertices)
+				{
+					eachPath.Add(new IntPoint(
+						eachPoint.X * scale,
+						eachPoint.Y * scale
+					));
+				}
+				paths.Add(eachPath);
+			}
+			return paths;
 		}
 
 	#endregion
@@ -117,26 +125,7 @@ namespace EPPZ.Geometry
 			return points;
 		}
 
-		public static Paths ClipperPathsFromVoronoiRegions(List<VoronoiRegion> voronoiRegions, float scale = 1.0f)
-		{
-			Paths paths = new Paths();
-			foreach (VoronoiRegion eachRegion in voronoiRegions)
-			{
-				Path eachPath = new Path();
-				foreach (Point eachPoint in eachRegion.Vertices)
-				{
-					eachPath.Add(new IntPoint(
-						eachPoint.X * scale,
-						eachPoint.Y * scale
-					));
-				}
-				paths.Add(eachPath);
-			}
-			return paths;
-		}
-
 	#endregion
 
 	}
 }
-#endif

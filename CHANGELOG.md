@@ -1,5 +1,10 @@
 # eppz! `Geometry`
 
+* 0.9.0
+
+	+ Added `TriangleNetAddOns`
+	+ Added `UnityEngineAdOns`	
+
 * 0.8.3
 
 	+ Added `ClipperAddOns`
