@@ -1,5 +1,11 @@
 # eppz! `Geometry`
 
+* 0.9.7
+
+	+ Triangulation
+		+ Feature ready (`Triangle.Net` beta 4 hooked up)
+		+ API is not quiet done yet
+
 * 0.9.5
 
 	+ Namings
