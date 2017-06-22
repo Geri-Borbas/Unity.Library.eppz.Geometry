@@ -1,5 +1,15 @@
 # eppz! `Geometry`
 
+* 0.9.5
+
+	+ Namings
+		+ Model classes namespaced into `Model`
+		+ Source classes namespaced into `Source`
+			+ `Components.PolygonSource` is `Source.Polygon`
+			+ `Components.SegmentSource` is `Source.Segment`
+			+ `pointTransforms` is `points`
+		+ Updated controllers in `Scenes/Controllers`
+
 * 0.9.0
 
 	+ Added `TriangleNetAddOns`

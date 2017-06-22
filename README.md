@@ -33,7 +33,7 @@ If you prefer to read example code immediately, you can find example scenes in [
 	+ Edge of two `Vertex` in a polygon (a special `Segment` subclass). Likewise vertices, this model is also aware of the polygon context it resides (neighbours, segments, edges, polygon, perpendicular, normal).
 * [`Polygon.cs`](Model/Edge.cs)
 	+ The role player, it really **embodies mostly every feature of this library**. Basically a polygon made of vertices.
-	+ Can be created with point array, transforms, [`PolygonSource`](Components/PolygonSource.cs). Further polygons can be embedded into recursively. Vertices, edges, polygons can be enumerated (recursively).
+	+ Can be created with point array, transforms, [`Source.Polygon`](Source/Polygon.cs) components. Further polygons can be embedded into recursively. Vertices, edges, polygons can be enumerated (recursively).
 	+ Area, winding direction, centroid are being calculated. Also carries the basic geometry features (point containment, line-, segment-, polygon intersection and more).
 	+ Using library modules, it implements polygon offset (outline), union polygon (polygon clipping), basic mesh triangulation. It implements conversion to both [Clipper](https://github.com/eppz/Clipper) and [Triangle.NET](https://github.com/eppz/Triangle.NET), so you can implement further integration with those (awesome) libraries.
 
@@ -82,6 +82,12 @@ For clipping, offsetting, triangulating the library use these brilliant third pa
 * [Triangle.NET](https://github.com/eppz/Triangle.NET)
 
 	+ Triangle.NET generates 2D (constrained) Delaunay triangulations and high-quality meshes of point sets or planar straight line graphs. It is a C# port by Christian Woltering of Jonathan Shewchuk's Triangle software. See standalone project repository [Triangle.NET](https://github.com/eppz/Triangle.NET) for details.
+
+## Naming
+
+The library uses namespaces heavily. I like to **name things as they are**. An edge in this library called `Edge`, a polygon is called `Polygon`. If it is a polygon model, it resides the `Model` namespace (`EPPZ.Geometry.Model` actually). Whether it is a source component for polygon, it resides in the `Source` namespace. It becomes nicely readable, as you declare polygons like `Model.Polygon`, or reference polygon sources as `Source.Polygon`.
+
+> In addition, every class is **namespaced in the folder** it resides. If you look at a folder name, you can tell that classes are namespaced to the same as the folder name.
 
 ## Add-ons
 

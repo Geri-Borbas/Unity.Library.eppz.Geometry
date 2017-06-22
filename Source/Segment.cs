@@ -9,15 +9,46 @@ using UnityEngine;
 using System.Collections;
 
 
-namespace EPPZ.Geometry.Components
+namespace EPPZ.Geometry.Source
 {
-	
-	
-	public class PolygonInspector : MonoBehaviour
+
+
+	using Model;
+
+
+	public class Segment : MonoBehaviour
 	{
 
 
-		public Polygon polygon;
-		public int currentEdgeIndex = 0;
+		[UnityEngine.Serialization.FormerlySerializedAs("pointTransforms")]
+		public Transform[] points;
+
+		public enum UpdateMode { Awake, Update, LateUpdate };
+		public UpdateMode update = UpdateMode.Awake;	
+
+		public Model.Segment segment;
+
+
+		void Awake()
+		{
+			segment = Model.Segment.SegmentWithSource(this);
+		}
+
+		void Update()
+		{
+			if (update == UpdateMode.Update)
+			{ UpdateModel(); }
+		}
+
+		void LateUpdate()
+		{
+			if (update == UpdateMode.LateUpdate)
+			{ UpdateModel(); }
+		}
+
+		void UpdateModel()
+		{
+			segment.UpdateWithSource(this);
+		}
 	}
 }

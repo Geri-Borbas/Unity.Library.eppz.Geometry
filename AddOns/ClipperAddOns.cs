@@ -24,6 +24,9 @@ namespace EPPZ.Geometry.AddOns
 	using Paths = List<List<ClipperLib.IntPoint>>;
 
 
+	using Model;
+
+
 	public static class ClipperAddOns
 	{
 

@@ -14,10 +14,6 @@ namespace EPPZ.Geometry.Lines
 {
 
 
-	using EPPZ.Lines;
-	using Components;
-
-
 	public class ExtendedPolygonLineRenderer : PolygonLineRenderer
 	{
 
@@ -26,13 +22,13 @@ namespace EPPZ.Geometry.Lines
 		public TextMesh areaTextMesh;
 
 		private float _previousArea;
-		private Polygon.Winding _previousWindingDirection;
+		private Model.Polygon.Winding _previousWindingDirection;
 		
 		
 		void Start()
 		{
 			// Model reference.
-			PolygonSource polygonSource = GetComponent<PolygonSource>();
+			Source.Polygon polygonSource = GetComponent<Source.Polygon>();
 			if (polygonSource != null)
 			{ polygon = polygonSource.polygon; }
 		}

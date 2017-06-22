@@ -15,7 +15,7 @@ namespace EPPZ.Geometry.Lines
 
 
 	using EPPZ.Lines;
-	using Components;
+	using Model;
 
 
 	public class SegmentLineRenderer : GeometryLineRenderer
@@ -31,8 +31,8 @@ namespace EPPZ.Geometry.Lines
 		void Start()
 		{
 			// Model reference.
-			SegmentSource segmentSource_ = GetComponent<SegmentSource>();
-			segment = segmentSource_.segment;
+			Source.Segment segmentSource = GetComponent<Source.Segment>();
+			segment = segmentSource.segment;
 		}
 		
 		protected override void OnDraw()

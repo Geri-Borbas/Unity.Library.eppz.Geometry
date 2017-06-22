@@ -9,7 +9,7 @@ using UnityEngine;
 using System.Collections;
 
 
-namespace EPPZ.Geometry
+namespace EPPZ.Geometry.Model
 {
 
 

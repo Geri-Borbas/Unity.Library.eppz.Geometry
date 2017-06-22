@@ -13,7 +13,7 @@ namespace EPPZ.Geometry.Scenes
 {
 
 
-	using Components;
+	using Model;
 	using Lines;
 
 
@@ -24,7 +24,7 @@ namespace EPPZ.Geometry.Scenes
 	{
 
 		public Transform centroid;
-		public PolygonSource[] polygonSources;
+		public Source.Polygon[] polygonSources;
 		List<Polygon> polygons = new List<Polygon>();
 
 
@@ -32,7 +32,7 @@ namespace EPPZ.Geometry.Scenes
 		{
 			// Collect polygons.
 			polygons.Clear();
-			foreach (PolygonSource eachPolygonSource in polygonSources)
+			foreach (Source.Polygon eachPolygonSource in polygonSources)
 			{ polygons.Add(eachPolygonSource.polygon); }
 
 			// Calculate compund centroid.

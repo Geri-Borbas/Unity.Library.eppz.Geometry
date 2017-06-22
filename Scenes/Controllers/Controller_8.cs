@@ -13,8 +13,8 @@ namespace EPPZ.Geometry.Scenes
 {
 
 
-	using Components;
 	using Lines;
+	using Model;
 
 
 	/// <summary>
@@ -29,8 +29,8 @@ namespace EPPZ.Geometry.Scenes
 		
 		public float accuracy = 0.0f;
 
-		public SegmentSource segmentSourceA;
-		public SegmentSource segmentSourceB;
+		public Source.Segment segmentSourceA;
+		public Source.Segment segmentSourceB;
 		public SegmentLineRenderer segmentRendererA;
 		public SegmentLineRenderer segmentRendererB;
 

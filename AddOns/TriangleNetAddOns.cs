@@ -16,13 +16,12 @@ namespace EPPZ.Geometry.AddOns
 
 
 	using System.Linq;
+	
 	using ClipperLib;
-
-	using TriangleNet.Geometry;
-
-	// Clipper definitions.
 	using Path = List<ClipperLib.IntPoint>;
 	using Paths = List<List<ClipperLib.IntPoint>>;
+
+	using Model;
 
 
 	public static class TriangleNetAddOns
@@ -31,19 +30,19 @@ namespace EPPZ.Geometry.AddOns
 
 	#region Polygon
 
-		public static TriangleNet.Geometry.Polygon TriangleNetPolygon(this EPPZ.Geometry.Polygon this_)
+		public static TriangleNet.Geometry.Polygon TriangleNetPolygon(this Polygon this_)
 		{
 			TriangleNet.Geometry.Polygon polygon = new TriangleNet.Geometry.Polygon();
 
 			int boundary = 1;
 			List<TriangleNet.Geometry.Vertex> vertices = new List<TriangleNet.Geometry.Vertex>();
-			this_.EnumeratePolygons((EPPZ.Geometry.Polygon eachPolygon) =>
+			this_.EnumeratePolygons((Polygon eachPolygon) =>
 			{
 				// Collect vertices.
 				vertices.Clear();
 				eachPolygon.EnumeratePoints((Vector2 eachPoint) =>
 				{
-					vertices.Add(new Vertex(
+					vertices.Add(new TriangleNet.Geometry.Vertex(
 						(double)eachPoint.x,
 						(double)eachPoint.y,
 						boundary
@@ -51,7 +50,7 @@ namespace EPPZ.Geometry.AddOns
 				});
 
 				// Add controur.
-				polygon.Add(new Contour(vertices.ToArray(), boundary));
+				polygon.Add(new TriangleNet.Geometry.Contour(vertices.ToArray(), boundary));
 
 				// Track.
 				boundary++;
@@ -73,7 +72,7 @@ namespace EPPZ.Geometry.AddOns
 			float ymax = 0.0f;
 			foreach (TriangleNet.Voronoi.Legacy.VoronoiRegion region in this_.Regions)
 			{
-				foreach (Point eachPoint in region.Vertices)
+				foreach (TriangleNet.Geometry.Point eachPoint in region.Vertices)
 				{
 					if (eachPoint.X > xmax) xmax = (float)eachPoint.X;
 					if (eachPoint.X < xmin) xmin = (float)eachPoint.X;
@@ -91,7 +90,7 @@ namespace EPPZ.Geometry.AddOns
 			foreach (TriangleNet.Voronoi.Legacy.VoronoiRegion eachRegion in voronoiRegions)
 			{
 				Path eachPath = new Path();
-				foreach (Point eachPoint in eachRegion.Vertices)
+				foreach (TriangleNet.Geometry.Point eachPoint in eachRegion.Vertices)
 				{
 					eachPath.Add(new IntPoint(
 						eachPoint.X * scale,
@@ -108,16 +107,16 @@ namespace EPPZ.Geometry.AddOns
 
 	#region Generic
 
-		public static Vector2 VectorFromPoint(Point point)
+		public static Vector2 VectorFromPoint(TriangleNet.Geometry.Point point)
 		{
 			return new Vector2((float)point.X, (float)point.Y);
 		}
 
-		public static Vector2[] PointsFromVertices(ICollection<Point> vertices)
+		public static Vector2[] PointsFromVertices(ICollection<TriangleNet.Geometry.Point> vertices)
 		{
 			Vector2[] points = new Vector2[vertices.Count];
 			int pointIndex = 0;
-			foreach (Point eachPoint in vertices)
+			foreach (TriangleNet.Geometry.Point eachPoint in vertices)
 			{
 				points[pointIndex] = VectorFromPoint(eachPoint);
 				pointIndex++;

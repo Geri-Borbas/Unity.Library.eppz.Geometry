@@ -10,11 +10,14 @@ using System.Collections;
 using UnityEditor;
 
 
-namespace EPPZ.Geometry.Editor
+namespace EPPZ.Geometry.Inspector.Editor
 {
 
 
-	[CustomEditor(typeof(EPPZ.Geometry.Components.PolygonInspector))]
+	using Model;
+
+
+	[CustomEditor(typeof(EPPZ.Geometry.Inspector.PolygonInspector))]
 	public class PolygonInspector : UnityEditor.Editor 
 	{
 
@@ -22,7 +25,7 @@ namespace EPPZ.Geometry.Editor
 		public override void OnInspectorGUI()
 		{
 			// References.
-			EPPZ.Geometry.Components.PolygonInspector polygonInspector = (EPPZ.Geometry.Components.PolygonInspector)target;
+			Inspector.PolygonInspector polygonInspector = (Inspector.PolygonInspector)target;
 			Polygon polygon = polygonInspector.polygon;
 			if (polygon == null) return;
 			Edge edge = polygon.edges[polygonInspector.currentEdgeIndex];

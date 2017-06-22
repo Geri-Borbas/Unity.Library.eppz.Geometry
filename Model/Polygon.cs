@@ -10,19 +10,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ClipperLib;
 
 
-namespace EPPZ.Geometry
+namespace EPPZ.Geometry.Model
 {
 
 
-	using Components;
-
-
-	// Clipper definitions.
-	using Path = List<IntPoint>;
-	using Paths = List<List<IntPoint>>;
+	using ClipperLib;
+	using Path = List<ClipperLib.IntPoint>;
+	using Paths = List<List<ClipperLib.IntPoint>>;
 
 
 	public class Polygon
@@ -68,15 +64,15 @@ namespace EPPZ.Geometry
 		public static Polygon PolygonWithPointList(List<Vector2> pointList)
 		{ return Polygon.PolygonWithPoints(pointList.ToArray()); }
 
-		public static Polygon PolygonWithSource(PolygonSource polygonSource)
+		public static Polygon PolygonWithSource(Source.Polygon polygonSource)
 		{
-			Polygon rootPolygon = Polygon.PolygonWithPointTransforms(polygonSource.pointTransforms);
+			Polygon rootPolygon = Polygon.PolygonWithPointTransforms(polygonSource.points);
 
 			// Collect sub-olygons if any.
 			foreach (Transform eachChildTransform in polygonSource.gameObject.transform)
 			{
 				GameObject eachChildGameObject = eachChildTransform.gameObject;
-				PolygonSource eachChildPolygonSource = eachChildGameObject.GetComponent<PolygonSource>();
+                Source.Polygon eachChildPolygonSource = eachChildGameObject.GetComponent<Source.Polygon>();
 				if (eachChildPolygonSource != null)
 				{
 					Polygon eachSubPolygon = Polygon.PolygonWithSource(eachChildPolygonSource);
@@ -157,9 +153,9 @@ namespace EPPZ.Geometry
 
 	#region Model updates
 
-		public void UpdatePointPositionsWithSource(PolygonSource polygonSource) // Assuming unchanged point count
+		public void UpdatePointPositionsWithSource(Source.Polygon polygonSource) // Assuming unchanged point count
 		{
-			UpdatePointPositionsWithTransforms(polygonSource.pointTransforms);
+			UpdatePointPositionsWithTransforms(polygonSource.points);
 		}
 
 		public void UpdatePointPositionsWithTransforms(Transform[] pointTransforms) // Assuming unchanged point count

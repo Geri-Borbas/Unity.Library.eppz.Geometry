@@ -14,6 +14,9 @@ namespace EPPZ.Geometry
 {
 
 
+	using Model; // For `Polygon` region only
+
+
 	public static class Geometry
 	{
 

@@ -13,8 +13,8 @@ namespace EPPZ.Geometry.Scenes
 {
 
 
-	using Components;
 	using Lines;
+	using Model;
 
 
 	/// <summary>
@@ -27,7 +27,7 @@ namespace EPPZ.Geometry.Scenes
 		public Color defaultColor;
 		public Color passingColor;
 
-		public PolygonSource polygonSource;
+		public Source.Polygon polygonSource;
 		public GameObject pointSource;
 		public PolygonLineRenderer polygonRenderer;
 

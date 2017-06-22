@@ -14,8 +14,7 @@ namespace EPPZ.Geometry.Lines
 {
 
 
-	using EPPZ.Lines;
-	using Components;
+	using Model;
 
 
 	public class PolygonLineRenderer : GeometryLineRenderer
@@ -27,13 +26,13 @@ namespace EPPZ.Geometry.Lines
 		public bool normals = false;
 
 		public Polygon polygon;
-		PolygonSource polygonSource;		
+		Source.Polygon polygonSource;		
 		
 		
 		void Start()
 		{
 			// Model reference.
-			polygonSource = GetComponent<PolygonSource>();
+			polygonSource = GetComponent<Source.Polygon>();
 			
 			if (polygonSource != null)
 			{ polygon = polygonSource.polygon; }

@@ -42,13 +42,13 @@ namespace EPPZ.Geometry.AddOns
 
 	#region Polygon
 
-		public static UnityEngine.Mesh Mesh(this EPPZ.Geometry.Polygon this_, string name = "")
+		public static UnityEngine.Mesh Mesh(this EPPZ.Geometry.Model.Polygon this_, string name = "")
 		{ return this_.Mesh(Color.white, TriangulatorType.Dwyer, name); }
 
-		public static UnityEngine.Mesh Mesh(this EPPZ.Geometry.Polygon this_, TriangulatorType triangulator, string name = "")
+		public static UnityEngine.Mesh Mesh(this EPPZ.Geometry.Model.Polygon this_, TriangulatorType triangulator, string name = "")
 		{ return this_.Mesh(Color.white, triangulator, name); }
 
-		public static UnityEngine.Mesh Mesh(this EPPZ.Geometry.Polygon this_, Color color, TriangulatorType triangulator, string name = "")
+		public static UnityEngine.Mesh Mesh(this EPPZ.Geometry.Model.Polygon this_, Color color, TriangulatorType triangulator, string name = "")
 		{
 			// Create geometry.
 			TriangleNet.Geometry.Polygon polygon = this_.TriangleNetPolygon();

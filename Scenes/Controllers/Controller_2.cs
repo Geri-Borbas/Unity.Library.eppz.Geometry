@@ -13,8 +13,8 @@ namespace EPPZ.Geometry.Scenes
 {
 
 
-	using Components;
 	using Lines;
+	using Model;
 
 
 	/// <summary>
@@ -30,7 +30,7 @@ namespace EPPZ.Geometry.Scenes
 		public float accuracy = 1.0f;
 		private float _previousAccuracy;
 
-		public PolygonSource polygonSource;
+		public Source.Polygon polygonSource;
 		public GameObject pointSource;
 		public PolygonLineRenderer polygonRenderer;
 

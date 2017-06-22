@@ -13,8 +13,9 @@ namespace EPPZ.Geometry.Scenes
 {
 
 
-	using Components;
 	using Lines;
+	using Model;
+	using Inspector;
 
 
 	/// <summary>
@@ -26,7 +27,7 @@ namespace EPPZ.Geometry.Scenes
 
 		[Range(0,2)] public float offset = 0.2f;
 
-		public PolygonSource polygonSource;
+		public Source.Polygon polygonSource;
 		public PolygonLineRenderer offsetPolygonRenderer;
 
 		private Polygon offsetPolygon;

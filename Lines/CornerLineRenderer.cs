@@ -14,7 +14,7 @@ namespace EPPZ.Geometry.Lines
 {
 
 	
-	using EPPZ.Lines;
+	using Model;
 
 
 	public class CornerLineRenderer : GeometryLineRenderer

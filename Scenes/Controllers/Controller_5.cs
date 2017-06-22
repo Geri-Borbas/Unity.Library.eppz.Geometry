@@ -13,8 +13,8 @@ namespace EPPZ.Geometry.Scenes
 {
 
 
-	using Components;
 	using Lines;
+	using Model;
 
 
 	/// <summary>
@@ -27,8 +27,8 @@ namespace EPPZ.Geometry.Scenes
 		public Color defaultColor;
 		public Color passingColor;
 
-		public PolygonSource starSource;
-		public PolygonSource squareSource;
+		public Source.Polygon starSource;
+		public Source.Polygon squareSource;
 		public PolygonLineRenderer starRenderer;
 		public PolygonLineRenderer squareRenderer;
 

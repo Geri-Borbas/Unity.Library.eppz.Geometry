@@ -10,11 +10,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace EPPZ.Geometry
+namespace EPPZ.Geometry.Model
 {
-
-
-	using Components;
 
 
 	public class Segment
@@ -86,9 +83,9 @@ namespace EPPZ.Geometry
 		
 	#region Factories
 		
-		public static Segment SegmentWithSource(SegmentSource segmentSource)
+		public static Segment SegmentWithSource(Source.Segment segmentSource)
 		{
-			return Segment.SegmentWithPointTransforms(segmentSource.pointTransforms);
+			return Segment.SegmentWithPointTransforms(segmentSource.points);
 		}
 		
 		public static Segment SegmentWithPointTransforms(Transform[] pointTransforms) // Uses Transform.localPosition.xy()
@@ -109,9 +106,9 @@ namespace EPPZ.Geometry
 
 	#region Model updates
 		
-		public void UpdateWithSource(SegmentSource segmentSource) // Assuming unchanged point count
+		public void UpdateWithSource(Source.Segment segmentSource) // Assuming unchanged point count
 		{
-			UpdateWithTransforms(segmentSource.pointTransforms);
+			UpdateWithTransforms(segmentSource.points);
 		}
 		
 		public void UpdateWithTransforms(Transform[] pointTransforms) // Assuming unchanged point count

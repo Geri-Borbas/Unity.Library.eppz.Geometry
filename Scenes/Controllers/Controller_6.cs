@@ -13,9 +13,10 @@ namespace EPPZ.Geometry.Scenes
 {
 
 
-	using Components;
+	
 	using Lines;
-
+	using Model;
+	
 
 	/// <summary>
 	/// 6. Vertex facing

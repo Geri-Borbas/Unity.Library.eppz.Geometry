@@ -13,7 +13,6 @@ namespace EPPZ.Geometry.Scenes
 {
 
 
-	using Components;
 	using Lines;
 
 
@@ -27,16 +26,16 @@ namespace EPPZ.Geometry.Scenes
 		public Color defaultColor;
 		public Color passingColor;	
 
-		public PolygonSource polygonSource;
-		public SegmentSource segmentSourceA;
-		public SegmentSource segmentSourceB;
+		public Source.Polygon polygonSource;
+		public Source.Segment segmentSourceA;
+		public Source.Segment segmentSourceB;
 		public PolygonLineRenderer polygonRenderer;
 		public SegmentLineRenderer segmentRendererA;
 		public SegmentLineRenderer segmentRendererB;
 
-		private Polygon polygon { get { return polygonSource.polygon; } }
-		private Segment segment_a { get { return segmentSourceA.segment; } }
-		private Segment segment_b { get { return segmentSourceB.segment; } }
+		private Model.Polygon polygon { get { return polygonSource.polygon; } }
+		private Model.Segment segment_a { get { return segmentSourceA.segment; } }
+		private Model.Segment segment_b { get { return segmentSourceB.segment; } }
 			
 
 		void Update()
