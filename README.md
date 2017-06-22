@@ -42,33 +42,33 @@ If you prefer to read example code immediately, you can find example scenes in [
 Most of the basic 2D geometry algorithm collection is implemented in this static base class. You can (mostly) **use them with Unity `Vector2` types directly**, so (almost entirely) without the model classes introduced above.
 
 * **Point**
-	+ `bool ArePointsEqualWithAccuracy(Vector2 a, Vector2 b, float accuracy)`
+	+ [**`ArePointsEqualWithAccuracy()`**](Geometry.cs#L24)
 		+ Determine if points are equal with a given accuracy.
-	+ `bool ArePointsCCW(Vector2 a, Vector2 b, Vector2 c)`
+	+ [**`ArePointsCCW()`**](Geometry.cs#L30)
 		+ Determine winding direction of three points.		
 * **Rect / Bounds**
-	+ `bool IsRectContainsRectSizeWithAccuracy(Rect rect1, Rect rect2, float accuracy)`
+	+ [**`IsRectContainsRectSizeWithAccuracy()`**](Geometry.cs#L41)
 		+ Determine if `rect2.size` fits into `rect1` (compare sizes only).
-	+ `bool IsRectContainsRectWithAccuracy(Rect rect1, Rect rect2, float accuracy)`
+	+ [**`IsRectContainsRectWithAccuracy()`**](Geometry.cs#L56)
 		+ Determine if `rect2` is contained by `rect1` (even if permiters are touching) with a given accuracy.
 * **Line**
-	+ `Vector2 IntersectionPointOfLines(Vector2 segment1_a, Vector2 segment1_b, Vector2 segment2_a, Vector2 segment2_b)`
+	+ [**`IntersectionPointOfLines()`**](Geometry.cs#L78)
 		+ Returns intersection point of two lines (defined by segment endpoints). Returns zero, when segments have common points, or when a segment point lies on other.
-	+ `float PointDistanceFromLine(Vector2 point, Vector2 segment_a, Vector2 segment_b)`
+	+ [**`PointDistanceFromLine()`**](Geometry.cs#L97)
 		+ Determine point distance from line (defined by segment endpoints).
 * **Segment**
-	+ `bool PointIsLeftOfSegment(Vector2 point, Vector2 segment_a, Vector2 segment_b)`
+	+ [**`PointIsLeftOfSegment()`**](Geometry.cs#L109)
 		+ Determine if a given point lies on the left side of a segment (line beneath).
-	+ `bool AreSegmentsEqualWithAccuracy(Vector2 segment1_a, Vector2 segment1_b, Vector2 segment2_a, Vector2 segment2_b, float accuracy)`
+	+ [**`AreSegmentsEqualWithAccuracy()`**](Geometry.cs#L116)
 		+ Determine if segments (defined by endpoints) are equal with a given accuracy.
-	+ `bool HaveSegmentsCommonPointsWithAccuracy(Vector2 segment1_a, Vector2 segment1_b, Vector2 segment2_a, Vector2 segment2_b, float accuracy)`
+	+ [**`HaveSegmentsCommonPointsWithAccuracy()`**](Geometry.cs#L125)
 		+ Determine if segments (defined by endpoints) have common points with a given accuracy.
-	+ `bool AreSegmentsIntersecting(Vector2 segment1_a, Vector2 segment1_b, Vector2 segment2_a, Vector2 segment2_b)`
+	+ [**`AreSegmentsIntersecting()`**](Geometry.cs#L141)
 		+ Determine if two segments defined by endpoints are intersecting (defined by points). True when the two segments are intersecting. Not true when endpoints are equal, nor when a point is contained by other segment. Credits to [Bryce Boe](https://github.com/bboe) (@bboe) for his writeup [Line Segment Intersection Algorithm](http://bryceboe.com/2006/10/23/line-segment-intersection-algorithm).
 * **Polygon** (using `EPPZ.Geometry.Polygon`)
-	+ `bool IsPolygonContainsPoint(Polygon polygon, Vector2 point)`
+	+ [**`IsPolygonContainsPoint()`**](Geometry.cs#L159)
 		+ Test if a polygon contains the given point (checks for sub-polygons recursive). Uses the same Bryce boe algorithm above, so considerations are the same. See [Point in polygon](https://en.wikipedia.org/wiki/Point_in_polygon#Ray_casting_algorithm) for more.
-	+ `Vector2 CentroidOfPolygons(Polygon[] polygons)`
+	+ [**`CentroidOfPolygons()`**](Geometry.cs#L177)
 		+ Returns the compound centroid of multiple polygon using [Geometric decomposition](https://en.wikipedia.org/wiki/Centroid#By_geometric_decomposition).
 
 ## Modules
@@ -86,7 +86,8 @@ For clipping, offsetting, triangulating the library use these brilliant third pa
 ## Add-ons
 
 * [`ClipperAddOns`](AddOns/ClipperAddOns.cs)
-	+ Mainly `Polygon` extensions for easy conversion between **eppz! Geometry** and [Clipper](https://github.com/eppz/Clipper). It has a method to convert from generic `Vector2[]` array. **[Clipper](https://github.com/eppz/Clipper) works with integers**. So conversion involves a scale up (and a scale down), thus you'll need to pass a scale value to Clipper. (`Polygon` internals use `10e+5f`).
+
+	+ Mainly `Polygon` extensions for easy conversion between **eppz! Geometry** and [Clipper](https://github.com/eppz/Clipper). It has a method to convert from generic `Vector2[]` array. **[Clipper](https://github.com/eppz/Clipper) works with integers**. So conversion involves a scale up (and a scale down), thus you'll need to pass a scale value to Clipper. (for example **eppz! Geometry** internals use `10e+5f` by default).
 		+ `Polygon PolygonFromClipperPaths(Paths paths, float scale)`
 		+ `Polygon PolygonFromClipperPath(Path path, float scale)`
 		+ `Paths ClipperPaths(this Polygon this_, float scale)`
