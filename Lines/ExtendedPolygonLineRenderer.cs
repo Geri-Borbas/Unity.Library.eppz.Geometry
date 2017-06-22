@@ -18,15 +18,15 @@ namespace EPPZ.Geometry.Lines
 	using Components;
 
 
-	public class PolygonLineRenderer : GeometryLineRenderer
+	public class ExtendedPolygonLineRenderer : PolygonLineRenderer
 	{
 
 
-		public Color lineColor;
-		public Color boundsColor;
-		public bool normals = false;
+		public GameObject windingObject;
+		public TextMesh areaTextMesh;
 
-		public Polygon polygon;
+		private float _previousArea;
+		private Polygon.Winding _previousWindingDirection;
 		
 		
 		void Start()
@@ -37,12 +37,30 @@ namespace EPPZ.Geometry.Lines
 			{ polygon = polygonSource.polygon; }
 		}
 
-		protected override void OnDraw()
+		void Update()
 		{
 			if (polygon == null) return; // Only having polygon
 
-			DrawRect(polygon.bounds, boundsColor);
-			DrawPolygon(polygon, lineColor, normals);
+			// Layout winding direction object if any.
+			bool hasWindingDirectionObject = (windingObject != null);
+			bool windingChanged = (polygon.winding != _previousWindingDirection);
+			if (hasWindingDirectionObject && windingChanged)
+			{
+				windingObject.transform.localScale = (polygon.isCW) ? Vector3.one : new Vector3 (1.0f, -1.0f, 1.0f);
+				windingObject.transform.rotation = (polygon.isCW) ? Quaternion.identity : Quaternion.Euler( new Vector3 (0.0f, 0.0f, 90.0f) );
+			}
+
+			// Layout area text mesh if any.
+			bool hasAreaTextMesh = (areaTextMesh != null);
+			bool areaChanged = (polygon.area != _previousArea);
+			if (hasAreaTextMesh && areaChanged)
+			{
+				areaTextMesh.text = polygon.area.ToString();
+			}
+
+			// Track.
+			_previousWindingDirection = polygon.winding;
+			_previousArea = polygon.area;
 		}
 	}
 }

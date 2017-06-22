@@ -5,45 +5,56 @@
 //  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-#if EPPZ_LINES
 using UnityEngine;
 using System.Collections;
 
 
-namespace EPPZ.Geometry.Lines
+namespace EPPZ.Geometry.Scenes
 {
 
 
-	using EPPZ.Lines;
 	using Components;
+	using Lines;
 
 
-	public class PolygonLineRenderer : GeometryLineRenderer
+	/// <summary>
+	/// 9. Polygon offset
+	/// </summary>
+	public class Controller_9 : MonoBehaviour
 	{
 
 
-		public Color lineColor;
-		public Color boundsColor;
-		public bool normals = false;
+		[Range(0,2)] public float offset = 0.2f;
 
-		public Polygon polygon;
-		
-		
+		public PolygonSource polygonSource;
+		public PolygonLineRenderer offsetPolygonRenderer;
+
+		private Polygon offsetPolygon;
+		private Polygon polygon { get { return polygonSource.polygon; } }
+
+		public PolygonInspector polygonInspector;
+		public PolygonInspector offsetPolygonInspector;
+
+
 		void Start()
 		{
-			// Model reference.
-			PolygonSource polygonSource = GetComponent<PolygonSource>();
-			if (polygonSource != null)
-			{ polygon = polygonSource.polygon; }
+			// Debug.
+			polygonInspector.polygon = polygonSource.polygon;
 		}
 
-		protected override void OnDraw()
+		void Update()
 		{
-			if (polygon == null) return; // Only having polygon
+			offsetPolygon = polygon.OffsetPolygon(offset);
 
-			DrawRect(polygon.bounds, boundsColor);
-			DrawPolygon(polygon, lineColor, normals);
+			// Render.
+			offsetPolygonRenderer.polygon = offsetPolygon; 
+
+			// Debug.
+			offsetPolygonInspector.polygon = offsetPolygon;
 		}
 	}
 }
-#endif
+
+
+
+

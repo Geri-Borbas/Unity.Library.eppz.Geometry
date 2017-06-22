@@ -5,45 +5,38 @@
 //  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-#if EPPZ_LINES
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 
-namespace EPPZ.Geometry.Lines
+namespace EPPZ.Geometry.Scenes
 {
 
 
-	using EPPZ.Lines;
 	using Components;
+	using Lines;
 
 
-	public class PolygonLineRenderer : GeometryLineRenderer
+	/// <summary>
+	/// 10. Multiple polygon centroid
+	/// </summary>
+	public class Controller_10 : MonoBehaviour
 	{
 
+		public Transform centroid;
+		public PolygonSource[] polygonSources;
+		List<Polygon> polygons = new List<Polygon>();
 
-		public Color lineColor;
-		public Color boundsColor;
-		public bool normals = false;
 
-		public Polygon polygon;
-		
-		
-		void Start()
+		void Update()
 		{
-			// Model reference.
-			PolygonSource polygonSource = GetComponent<PolygonSource>();
-			if (polygonSource != null)
-			{ polygon = polygonSource.polygon; }
-		}
+			// Collect polygons.
+			polygons.Clear();
+			foreach (PolygonSource eachPolygonSource in polygonSources)
+			{ polygons.Add(eachPolygonSource.polygon); }
 
-		protected override void OnDraw()
-		{
-			if (polygon == null) return; // Only having polygon
-
-			DrawRect(polygon.bounds, boundsColor);
-			DrawPolygon(polygon, lineColor, normals);
+			// Calculate compund centroid.
+			centroid.position = Geometry.CentroidOfPolygons(polygons.ToArray());
 		}
 	}
 }
-#endif

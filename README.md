@@ -3,7 +3,7 @@
 
 **📐 2D geometry for Unity.** Suited for everyday polygon hassle.
 
-Polygon clipping, polygon winding direction, polygon area, polygon centroid, centroid of multiple polygons, line intersection, point-line distance, segment intersection, polygon-point containment, polygon triangulation, polygon Voronoi diagram, polygon offset, polygon outline, polygon buffer, polygon union, polygon substraction, polygon boolean operations, and more. It is a polygon fest.
+Polygon clipping, polygon winding direction, polygon area, polygon centroid, centroid of multiple polygons, line intersection, point-line distance, segment intersection, polygon-point containment, polygon triangulation, polygon Voronoi diagram, polygon offset, polygon outline, polygon buffer, polygon union, polygon substraction, polygon boolean operations, and more.
 
 The library is **being used in production**. However, it comes with the disclaimed liability and warranty of [MIT License](https://en.wikipedia.org/wiki/MIT_License).
 
@@ -19,6 +19,9 @@ If you prefer to read example code immediately, you can find example scenes in [
 + [Polygon-Polygon containment](Scenes/README.md/#5-polygon-polygon-containment)
 + [Vertex facing](Scenes/README.md/#6-vertex-facing)
 + [Polygon area, Polygon winding](Scenes/README.md/#7-polygon-area-polygon-winding)
++ [Segment-Segment intersection point](Scenes/README.md/#8-segment-segment-intersection-point)
++ [Polygon offset](Scenes/README.md/#9-polygon-offset)
++ [Multiple polygon centroid](Scenes/README.md/#10-multiple-polygon-centroid)
 
 ## Model classes
 

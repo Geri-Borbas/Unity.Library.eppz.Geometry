@@ -1,7 +1,7 @@
-# eppz! `Geometry`
+# [eppz! `Geometry`](https://github.com/eppz/Unity.Library.eppz,Geometry)
 > part of [**Unity.Library.eppz**](https://github.com/eppz/Unity.Library.eppz)
 
-## Test scenes
+## Test scenes 
 
 + [Polygon-Point containment](#0-polygon-point-containment)
 + [Polygon-Segment intersection test](#1-polygon-segment-intersection)
@@ -11,6 +11,9 @@
 + [Polygon-Polygon containment](#5-polygon-polygon-containment)
 + [Vertex facing](#6-vertex-facing)
 + [Polygon area, Polygon winding](#7-polygon-area-polygon-winding)
++ [Segment-Segment intersection point](#8-segment-segment-intersection-point)
++ [Polygon offset](#9-polygon-offset)
++ [Multiple polygon centroid](#10-multiple-polygon-centroid)
 
 These test scenes are designed to experience / proof the **eppz! Geometry** library features. Hit play, then manipulate the geometry in Scene window while in game mode (watch out to move the points directly instead their parent container). Every relevant code is in the corresponding `Controller_#.cs`, so you can see **how to use the API**.
 
@@ -125,6 +128,45 @@ bool isCW = polygon.isCW;
 ```
 
 See [`Model/Polygon.cs`](Model/Polygon.cs) source for the details.
+
+## 8. Segment-Segment intersection point
+
+Segment intersection has two parts actually. Get the **intersection point of the lines** defined by the segment, then look up if the point **resides on the segments**.
+
+The first part has implemented as a generic `Geometry.IntersectionOfSegments()`.
+
+The second part gets more tricky, uses `accuracy` like many tests above. Checks if bounds are overlap, after that it uses the segment-point containment for the endpoints, then checks if the segments has intersection point at all (using winding tests), then returns with the intersection point of lines.
+
+> To avoid redundant test method calls, the method follows API style of `Physics.Raycast`, where you can query if there is intersection at all, then use point only if any.
+
+```C#
+// Output will have non-zero value only on having a valid intersection.
+Vector2 intersectionPoint;
+bool isIntersecting = a.IntersectionWithSegment(b, out intersectionPoint);
+```
+
+See [`Controller_8.cs`](Controllers/Controller_8.cs) for the full script context.
+
+## 9. Polygon offset
+
+Robust polygon offset (also known as polygon outline / polygon buffer) solution (using [Clipper](https://github.com/eppz/Clipper) by Angus Johnson).
+
+```C#
+float offset = 0.2f;
+Polygon offsetPolygon = polygon.OffsetPolygon(offset);
+```
+
+See [`Controller_9.cs`](Controllers/Controller_9.cs) for the full script context.
+
+## 10. Multiple polygon centroid
+
+You can see how the compound centorid changes as you nudge polygons, vertices around. Algorithm uses [Geometric decomposition](https://en.wikipedia.org/wiki/Centroid#By_geometric_decomposition).
+
+```C#
+// Calculate compund centroid.
+centroid.position = Geometry.CentroidOfPolygons(polygons));
+```
+See [`Controller_10.cs`](Controllers/Controller_10.cs) for the full script context.
 
 ## License
 

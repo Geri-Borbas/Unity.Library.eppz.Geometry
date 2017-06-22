@@ -1,5 +1,14 @@
 # eppz! `Geometry`
 
+* 0.8.0
+
+	+ Test scenes
+		`8. Segment-Segment intersection point`
+		`9. Polygon offset`
+		`10. Multiple polygon centroid`
+	+ `ExtendedPolygonLineRenderer`
+		+ Winding and area hooks moved down here
+
 * 0.7.0
 
 	+ Test scenes
