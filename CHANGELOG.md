@@ -1,5 +1,16 @@
 # eppz! `Geometry`
 
+* 1.0.0
+
+	+ Triangulation
+		+ Resolved issue with inner triangles
+			+ Skip triangles if centroid not contained by polygon
+	+ `Source`
+		+ `Mesh`
+			+ Component to feed `MeshFilter` components
+		+ `Polygon` / `Segment`
+			+ Added `coordinates` to process `World` / `Local` coordinates
+
 * 0.9.7
 
 	+ Triangulation

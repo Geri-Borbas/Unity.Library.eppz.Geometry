@@ -26,6 +26,9 @@ namespace EPPZ.Geometry.Source
 		public enum UpdateMode { Awake, Update, LateUpdate };
 		public UpdateMode update = UpdateMode.Awake;	
 
+		public enum Coordinates { World, Local }
+		public Coordinates coordinates = Coordinates.World;
+
 		public Model.Segment segment;
 
 

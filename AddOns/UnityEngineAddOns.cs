@@ -39,6 +39,8 @@ namespace EPPZ.Geometry.AddOns
 			}
 		}
 
+		static bool skipCentroidTest = false; // For debugging
+
 
 	#region Polygon
 
@@ -75,12 +77,12 @@ namespace EPPZ.Geometry.AddOns
 			Vector2[] _uv = new Vector2[vertexCount];
 			Vector3[] _normals = new Vector3[vertexCount];
 			Color[] _colors = new Color[vertexCount];
-			int[] _triangles = new int[triangleCount * 3];
+			List<int> _triangles = new List<int>(); // Size may vary
 
+			// Vertices.
 			int index = 0;
 			foreach (TriangleNet.Geometry.Vertex eachVertex in triangulatedMesh.Vertices)
 			{
-
 				_vertices[index] = new Vector3(
 					(float)eachVertex.x,
 					(float)eachVertex.y,
@@ -94,21 +96,27 @@ namespace EPPZ.Geometry.AddOns
 				index++;
 			}
 
-			int cursor = 0;
+			// Triangles.
 			foreach (TriangleNet.Topology.Triangle eachTriangle in triangulatedMesh.Triangles)
 			{
-				Debug.Log(
-					"ID: "+eachTriangle.id+
-					" id: "+eachTriangle.ID+
-					// " Region: "+eachTriangle.Region+
-					" Area: "+eachTriangle.Area
-					// " Boundary: "+eachTriangle.GetVertex(0).Boundary
+				// Get vertices.
+				Point P2 = eachTriangle.GetVertex(2);
+				Point P1 = eachTriangle.GetVertex(1);
+				Point P0 = eachTriangle.GetVertex(0);
+
+				// Get centroid.
+				Vector2 centroid = new Vector2(
+					(float)(P2.X + P1.X + P0.X) / 3.0f,
+					(float)(P2.Y + P1.Y + P0.Y) / 3.0f
 				);
 
-				_triangles[cursor] = eachTriangle.GetVertexID(2); // P2
-				_triangles[cursor + 1] = eachTriangle.GetVertexID(1); // P1
-				_triangles[cursor + 2] = eachTriangle.GetVertexID(0); // P0
-				cursor += 3;
+				// Add only if centroid contained.
+				if (this_.ContainsPoint(centroid) || skipCentroidTest)
+				{
+					_triangles.Add(P2.ID);
+					_triangles.Add(P1.ID);
+					_triangles.Add(P0.ID);					
+				}
 			}
 
 			// Create / setup mesh.
@@ -118,7 +126,7 @@ namespace EPPZ.Geometry.AddOns
 			mesh.normals = _normals;
 			mesh.colors = _colors;
 			mesh.subMeshCount = 1;
-			mesh.SetTriangles(_triangles, 0);
+			mesh.SetTriangles(_triangles.ToArray(), 0);
 			mesh.name = name;
 
 			return mesh;

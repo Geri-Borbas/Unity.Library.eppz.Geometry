@@ -25,20 +25,29 @@ namespace EPPZ.Geometry.Lines
 		public Color lineColor;
 		public Color boundsColor;
 		public bool normals = false;
-		private Segment segment;
 		
+		Segment segment;
+		Source.Segment segmentSource;
 		
 		void Start()
 		{
 			// Model reference.
-			Source.Segment segmentSource = GetComponent<Source.Segment>();
+			segmentSource = GetComponent<Source.Segment>();
 			segment = segmentSource.segment;
 		}
 		
 		protected override void OnDraw()
 		{
-			DrawRect(segment.bounds, boundsColor);
-			DrawSegment(segment, lineColor, normals);
+			if (segmentSource.coordinates == Source.Segment.Coordinates.World)
+			{
+				DrawRect(segment.bounds, boundsColor);
+				DrawSegment(segment, lineColor, normals);
+			}
+			else
+			{
+				DrawRectWithTransform(segment.bounds, boundsColor, this.transform);
+				DrawSegmentWithTransform(segment, lineColor, this.transform, normals);
+			}
 		}
 	}
 }

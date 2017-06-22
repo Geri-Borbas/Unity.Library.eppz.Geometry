@@ -45,8 +45,16 @@ namespace EPPZ.Geometry.Lines
 
 			if (polygon == null) return; // Only having polygon
 
-			DrawRect(polygon.bounds, boundsColor);
-			DrawPolygon(polygon, lineColor, normals);
+			if (polygonSource.coordinates == Source.Polygon.Coordinates.World)
+			{
+				DrawRect(polygon.bounds, boundsColor);
+				DrawPolygon(polygon, lineColor, normals);
+			}
+			else
+			{
+				DrawRectWithTransform(polygon.bounds, boundsColor, this.transform);
+				DrawPolygonWithTransform(polygon, lineColor, this.transform, normals);
+			}
 		}
 	}
 }

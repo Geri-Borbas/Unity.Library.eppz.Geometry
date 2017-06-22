@@ -6,32 +6,68 @@
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 
-namespace EPPZ.Geometry.Scenes
+namespace EPPZ.Geometry.Source
 {
 
 
 	using AddOns;
-	using Model;
-	using Lines;
 
 
-	/// <summary>
-	/// 11. Polygon triangulation
-	/// </summary>
-	public class Controller_11 : MonoBehaviour
+	public class Mesh : MonoBehaviour
 	{
 
-		public Source.Polygon star;
-		public TriangulatorType triangulator;
-		public Color color;		
-		public MeshFilter meshFilter;
+		
+		public TriangulatorType triangulator = TriangulatorType.Dwyer;
+		public Color color = Color.white;
+		
+		public enum UpdateMode { Awake, Update, LateUpdate };
+		public UpdateMode update = UpdateMode.Awake;
+
+		Source.Polygon polygonSource;
+		Model.Polygon polygon;
+		MeshFilter meshFilter;
+
+
+		void Awake()
+		{
+			polygonSource = GetComponent<Source.Polygon>();
+			meshFilter = GetComponent<MeshFilter>();
+
+			if (meshFilter == null)
+			{
+				Debug.LogWarning("No <b>MeshFilter</b> component on \""+name+"\" (for <b>PolygonMesh</b> to use as output). Disabled <i>GameObject</i>.");
+				gameObject.SetActive(false);
+			}
+
+			if (polygonSource != null)			
+			{ polygon = polygonSource.polygon; }
+
+			if (update == UpdateMode.Awake)
+			{ CreateMesh(); }
+		}
 
 		void Update()
 		{
-			meshFilter.mesh = star.polygon.Mesh(color, triangulator);
+			if (update == UpdateMode.Update)
+			{ CreateMesh(); }
+		}
+
+		void LateUpdate()
+		{
+			if (update == UpdateMode.LateUpdate)
+			{ CreateMesh(); }
+		}
+
+		void CreateMesh()
+		{
+			if (polygonSource != null)
+			{ polygon = polygonSource.polygon; }
+
+			meshFilter.mesh = polygon.Mesh(color, triangulator);
 		}
 	}
 }

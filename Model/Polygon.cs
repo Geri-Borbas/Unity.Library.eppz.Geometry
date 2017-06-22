@@ -66,7 +66,7 @@ namespace EPPZ.Geometry.Model
 
 		public static Polygon PolygonWithSource(Source.Polygon polygonSource)
 		{
-			Polygon rootPolygon = Polygon.PolygonWithPointTransforms(polygonSource.points);
+			Polygon rootPolygon = Polygon.PolygonWithPointTransforms(polygonSource.points, polygonSource.coordinates);
 
 			// Collect sub-olygons if any.
 			foreach (Transform eachChildTransform in polygonSource.gameObject.transform)
@@ -102,14 +102,19 @@ namespace EPPZ.Geometry.Model
 			return rootPolygon;
 		}
 
-		public static Polygon PolygonWithPointTransforms(Transform[] pointTransforms)
+		public static Polygon PolygonWithPointTransforms(Transform[] pointTransforms, Source.Polygon.Coordinates coordinates)
 		{
 			// Create points array.
 			Vector2[] points = new Vector2[pointTransforms.Length];
 			for (int index = 0; index < pointTransforms.Length; index++)
 			{
 				Transform eachPointTransform = pointTransforms[index];
-				points[index] = eachPointTransform.position.xy();
+
+				if (coordinates == Source.Polygon.Coordinates.World)
+				{ points[index] = eachPointTransform.position.xy(); }
+
+				if (coordinates == Source.Polygon.Coordinates.Local)
+				{ points[index] = eachPointTransform.localPosition.xy(); }
 			}
 			
 			return Polygon.PolygonWithPoints(points);
@@ -155,15 +160,20 @@ namespace EPPZ.Geometry.Model
 
 		public void UpdatePointPositionsWithSource(Source.Polygon polygonSource) // Assuming unchanged point count
 		{
-			UpdatePointPositionsWithTransforms(polygonSource.points);
+			UpdatePointPositionsWithTransforms(polygonSource.points, polygonSource.coordinates);
 		}
 
-		public void UpdatePointPositionsWithTransforms(Transform[] pointTransforms) // Assuming unchanged point count
+		public void UpdatePointPositionsWithTransforms(Transform[] pointTransforms, Source.Polygon.Coordinates coordinates) // Assuming unchanged point count
 		{
 			for (int index = 0; index < pointTransforms.Length; index++)
 			{
 				Transform eachPointTransform = pointTransforms[index];
-				_points[index] = eachPointTransform.position.xy();
+
+				if (coordinates == Source.Polygon.Coordinates.World)
+				{ _points[index] = eachPointTransform.position.xy(); }
+
+				if (coordinates == Source.Polygon.Coordinates.Local)
+				{ _points[index] = eachPointTransform.localPosition.xy(); }
 			}
 
 			// Polygon calculations.

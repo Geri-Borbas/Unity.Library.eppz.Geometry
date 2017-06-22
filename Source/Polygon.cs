@@ -24,7 +24,10 @@ namespace EPPZ.Geometry.Source
 		public float offset = 0.0f;
 
 		public enum UpdateMode { Awake, Update, LateUpdate };
-		public UpdateMode update = UpdateMode.Awake;		
+		public UpdateMode update = UpdateMode.Awake;	
+
+		public enum Coordinates { World, Local }
+		public Coordinates coordinates = Coordinates.World;	
 
 		Model.Polygon _polygon;
 		Model.Polygon _offsetPolygon;		
