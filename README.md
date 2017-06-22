@@ -22,6 +22,7 @@ If you prefer to read example code immediately, you can find example scenes in [
 + [Segment-Segment intersection point](Scenes/README.md/#8-segment-segment-intersection-point)
 + [Polygon offset](Scenes/README.md/#9-polygon-offset)
 + [Multiple polygon centroid](Scenes/README.md/#10-multiple-polygon-centroid)
++ [Polygon triangulation](Scenes/README.md/#11-polygon-triangulation)
 
 ## Model classes
 
@@ -99,6 +100,22 @@ The library uses namespaces heavily. I like to **name things as they are**. An e
 		+ `Paths ClipperPaths(this Polygon this_, float scale)`
 		+ `Path ClipperPath(this Polygon this_, float scale)`
 		+ `Vector2[] PointsFromClipperPath(Path path, float scale)`
+
+* [`TriangleNetAddOns`](AddOns/TriangleNetAddOns.cs)		
+
+	+ Bridges the gap between library `Model.Polygon` objects and `Triangle.NET` models (meshes, voronoi diagrams).
+		+ `TriangleNet.Geometry.Polygon TriangleNetPolygon(this Polygon this_)`
+		+ `Rect Bounds(this TriangleNet.Voronoi.Legacy.SimpleVoronoi this_)`
+		+ `Paths ClipperPathsFromVoronoiRegions(List<TriangleNet.Voronoi.Legacy.VoronoiRegion> voronoiRegions, float scale = 1.0f)`
+		+ `Vector2 VectorFromPoint(TriangleNet.Geometry.Point point)`
+		+ `Vector2[] PointsFromVertices(ICollection<TriangleNet.Geometry.Point> vertices)`
+
+* [`UnityEngineAddOns`](AddOns/UnityEngineAddOns.cs)
+
+	+ Contains a single `Model.Polygon` (yet enormously useful) extension that triangulates the corresponding polygon, and hooks up the result into a `UnityEngine.MeshFilter` component. This is the core functionality embedded into `Source.Mesh` component (see example scene [Polygon triangulation](Scenes/README.md/#11-polygon-triangulation) for more).
+		+ `UnityEngine.Mesh Mesh(this EPPZ.Geometry.Model.Polygon this_, string name = "")`
+		+ `UnityEngine.Mesh Mesh(this EPPZ.Geometry.Model.Polygon this_, TriangulatorType triangulator, string name = "")`
+		+ `UnityEngine.Mesh Mesh(this EPPZ.Geometry.Model.Polygon this_, Color color, TriangulatorType triangulator, string name = "")`
 
 ## License
 

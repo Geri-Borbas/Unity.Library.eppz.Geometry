@@ -14,6 +14,7 @@
 + [Segment-Segment intersection point](#8-segment-segment-intersection-point)
 + [Polygon offset](#9-polygon-offset)
 + [Multiple polygon centroid](#10-multiple-polygon-centroid)
++ [Polygon triangulation](#11-polygon-triangulation)
 
 These test scenes are designed to experience / proof the **eppz! Geometry** library features. Hit play, then manipulate the geometry in Scene window while in game mode (watch out to move the points directly instead their parent container). Every relevant code is in the corresponding `Controller_#.cs`, so you can see **how to use the API**.
 
@@ -167,6 +168,16 @@ You can see how the compound centorid changes as you nudge polygons, vertices ar
 centroid.position = Geometry.CentroidOfPolygons(polygons));
 ```
 See [`Controller_10.cs`](Controllers/Controller_10.cs) for the full script context.
+
+## 11. Polygon triangulation
+
+This scene uses a `Source.Mesh` component to simply **triangluate a polygon**. If both `Source.Polygon` and `UnityEngine.MeshFilter` component is present on a `GameObject`, you can use this setup. It uses an extension method `Polygon.Mesh()` that hooks up `Triangle.NET` mesh output into a `UnityEngine.MeshFilter` (with some additional issue resolved regarding self intersecting polygons).
+
+```C#
+// Assign trianglated mesh.
+meshFilter.mesh = polygon.Mesh(color, triangulator);
+```
+See [`Source/Mesh.cs`](Source/Mesh.cs) source for the details.
 
 ## License
 
