@@ -13,49 +13,75 @@ namespace EPPZ.Geometry.Scenes
 {
 
 
+	
 	using Lines;
 	using Model;
-
+	
 
 	/// <summary>
-	/// 0. Polygon-Point containment
+	/// 6. Vertex facing
 	/// </summary>
-	public class Controller_0 : MonoBehaviour
+	public class Controller_6 : MonoBehaviour
 	{
 
 
 		public Color defaultColor;
 		public Color passingColor;
+		
+		public CornerLineRenderer cornerRenderer;
+		public Renderer normalPointRenderer;
 
-		public Source.Polygon polygonSource;
-		public GameObject[] pointObjects;
-		public PolygonLineRenderer polygonRenderer;
+		public Transform[] segmentATransforms;
+		public Transform[] segmentBTransforms;
 
-		Polygon polygon { get { return polygonSource.polygon; } }
-			
+		public Transform[] normalTransforms;
+
+		private Segment segmentA;
+		private Segment segmentB;
+		private Segment normal;
+
+		void Start()
+		{
+			// Create models.
+			segmentA = Segment.SegmentWithPointTransforms(segmentATransforms);
+			segmentB = Segment.SegmentWithPointTransforms(segmentBTransforms);
+			normal = Segment.SegmentWithPointTransforms(normalTransforms);
+
+			// Feed renderer.
+			cornerRenderer.segmentA = segmentA;
+			cornerRenderer.segmentB = segmentB;
+			cornerRenderer.normal = normal;
+		}
 
 		void Update()
-		{ RenderTestResult(PointContainmentTest()); }
-
-		bool PointContainmentTest()
 		{
-			bool containsAllPoints = true;
-			foreach (GameObject eachPointObject in pointObjects)
-			{
-				Vector2 eachPoint = eachPointObject.transform.position.xy();
-				containsAllPoints &= polygon.ContainsPoint(eachPoint);
-			}
-			return containsAllPoints;
+			// Update model.
+			segmentA.UpdateWithTransforms(segmentATransforms);
+			segmentB.UpdateWithTransforms(segmentBTransforms);
+			normal.UpdateWithTransforms(normalTransforms);
+
+			// Test.
+			RenderTestResult(NormalFacingTest());
 		}
-		
+
+		bool NormalFacingTest()
+		{
+			Vector2 point = normal.b;
+			bool acute = segmentA.IsPointLeft(segmentB.b);
+			bool leftA = segmentA.IsPointLeft(point);
+			bool leftB = segmentB.IsPointLeft(point);
+			bool outward = (acute) ? leftA && leftB : leftA || leftB;
+			bool inward = !outward;
+			return inward;
+		}
+
 		void RenderTestResult(bool testResult)
 		{
 			Color color = (testResult) ? passingColor : defaultColor;
 
-			// Layout colors.
-			polygonRenderer.lineColor = color;
-			foreach (GameObject eachPointObject in pointObjects)
-			{ eachPointObject.GetComponent<Renderer>().material.color = color; }
+			// Layout color.
+			cornerRenderer.segmentNormalColor = color;
+			normalPointRenderer.material.color = color;
 		}
 	}
 }

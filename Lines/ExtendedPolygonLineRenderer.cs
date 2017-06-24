@@ -14,47 +14,49 @@ namespace EPPZ.Geometry.Lines
 {
 
 
-	using Model;
-
-
-	public class PolygonLineRenderer : GeometryLineRenderer
+	public class ExtendedPolygonLineRenderer : PolygonLineRenderer
 	{
 
 
-		public Color lineColor;
-		public Color boundsColor;
-		public bool normals = false;
+		public GameObject windingObject;
+		public TextMesh areaTextMesh;
 
-		public Polygon polygon;
-		Source.Polygon polygonSource;		
+		private float _previousArea;
+		private Model.Polygon.Winding _previousWindingDirection;
 		
 		
 		void Start()
 		{
 			// Model reference.
-			polygonSource = GetComponent<Source.Polygon>();
-			
+			Source.Polygon polygonSource = GetComponent<Source.Polygon>();
 			if (polygonSource != null)
 			{ polygon = polygonSource.polygon; }
 		}
 
-		protected override void OnDraw()
+		void Update()
 		{
-			if (polygonSource != null)
-			{ polygon = polygonSource.polygon; }
-
 			if (polygon == null) return; // Only having polygon
 
-			if (polygonSource.coordinates == Source.Polygon.Coordinates.World)
+			// Layout winding direction object if any.
+			bool hasWindingDirectionObject = (windingObject != null);
+			bool windingChanged = (polygon.winding != _previousWindingDirection);
+			if (hasWindingDirectionObject && windingChanged)
 			{
-				DrawRect(polygon.bounds, boundsColor);
-				DrawPolygon(polygon, lineColor, normals);
+				windingObject.transform.localScale = (polygon.isCW) ? Vector3.one : new Vector3 (1.0f, -1.0f, 1.0f);
+				windingObject.transform.rotation = (polygon.isCW) ? Quaternion.identity : Quaternion.Euler( new Vector3 (0.0f, 0.0f, 90.0f) );
 			}
-			else
+
+			// Layout area text mesh if any.
+			bool hasAreaTextMesh = (areaTextMesh != null);
+			bool areaChanged = (polygon.area != _previousArea);
+			if (hasAreaTextMesh && areaChanged)
 			{
-				DrawRectWithTransform(polygon.bounds, boundsColor, this.transform);
-				DrawPolygonWithTransform(polygon, lineColor, this.transform, normals);
+				areaTextMesh.text = polygon.area.ToString();
 			}
+
+			// Track.
+			_previousWindingDirection = polygon.winding;
+			_previousArea = polygon.area;
 		}
 	}
 }

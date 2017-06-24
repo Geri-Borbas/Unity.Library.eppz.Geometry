@@ -15,17 +15,48 @@ namespace EPPZ.Geometry.Lines
 
 
 	using EPPZ.Lines;
+	using Model;
 
 
 	public class GeometryLineRenderer : DirectLineRenderer
 	{
 
 
-		protected void DrawSegment(Segment segment, Color color)	
-		{ DrawLine(segment.a, segment.b, color); }
+		protected void DrawSegment(Segment segment, Color color, bool drawNormals = false)
+		{
+			DrawLine(segment.a, segment.b, color);
+			if (drawNormals)
+			{
+				Vector2 halfie = segment.a + ((segment.b - segment.a) / 2.0f);
+				DrawLine(halfie, halfie + segment.normal * 0.1f, color);
+			}
+		}
 
+		protected void DrawSegmentWithTransform(Segment segment, Color color, Transform transform_, bool drawNormals = false)
+		{
+			DrawLineWithTransform(segment.a, segment.b, color, transform_);
+			if (drawNormals)
+			{
+				Vector2 halfie = segment.a + ((segment.b - segment.a) / 2.0f);
+				DrawLineWithTransform(halfie, halfie + segment.normal * 0.1f, color, transform_);
+			}
+		}
+		
 		protected void DrawPolygon(Polygon polygon, Color color)
 		{ polygon.EnumerateEdgesRecursive((Edge eachEdge) => DrawLine(eachEdge.a, eachEdge.b, color)); }
+
+		protected void DrawPolygon(Polygon polygon, Color color, bool drawNormals)
+		{
+			polygon.EnumerateEdgesRecursive((Edge eachEdge) =>
+			{
+				DrawLine(eachEdge.a, eachEdge.b, color);
+				if (drawNormals)
+				{
+					Vector2 halfie = eachEdge.a + ((eachEdge.b - eachEdge.a) / 2.0f);
+					DrawLine(halfie, halfie + eachEdge.normal * 0.1f, color);
+				}
+			});
+		}	
 
 		protected void DrawPolygonWithTransform(Polygon polygon, Color color, Transform transform_)
 		{ DrawPolygonWithTransform(polygon, color, transform_, false); }

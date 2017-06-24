@@ -7,35 +7,67 @@
 //
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
-namespace EPPZ.Geometry.Components
+namespace EPPZ.Geometry.Source
 {
 
 
-	public class SegmentSource : MonoBehaviour
+	using AddOns;
+
+
+	public class Mesh : MonoBehaviour
 	{
 
+		
+		public TriangulatorType triangulator = TriangulatorType.Dwyer;
+		public Color color = Color.white;
+		
+		public enum UpdateMode { Awake, Update, LateUpdate };
+		public UpdateMode update = UpdateMode.Awake;
 
-		public Transform[] pointTransforms;
-		public bool updateModel = false;
-
-		public Segment segment;
+		Source.Polygon polygonSource;
+		Model.Polygon polygon;
+		MeshFilter meshFilter;
 
 
 		void Awake()
 		{
-			// Construct a segment model from transforms.
-			segment = Segment.SegmentWithSource(this);
+			polygonSource = GetComponent<Source.Polygon>();
+			meshFilter = GetComponent<MeshFilter>();
+
+			if (meshFilter == null)
+			{
+				Debug.LogWarning("No <b>MeshFilter</b> component on \""+name+"\" (for <b>PolygonMesh</b> to use as output). Disabled <i>GameObject</i>.");
+				gameObject.SetActive(false);
+			}
+
+			if (polygonSource != null)			
+			{ polygon = polygonSource.polygon; }
+
+			if (update == UpdateMode.Awake)
+			{ CreateMesh(); }
 		}
-		
+
 		void Update()
 		{
-			if (updateModel)
-			{
-				// Update segment model with transforms, also update calculations.
-				segment.UpdateWithSource(this);
-			}
+			if (update == UpdateMode.Update)
+			{ CreateMesh(); }
+		}
+
+		void LateUpdate()
+		{
+			if (update == UpdateMode.LateUpdate)
+			{ CreateMesh(); }
+		}
+
+		void CreateMesh()
+		{
+			if (polygonSource != null)
+			{ polygon = polygonSource.polygon; }
+
+			meshFilter.mesh = polygon.Mesh(color, triangulator);
 		}
 	}
 }

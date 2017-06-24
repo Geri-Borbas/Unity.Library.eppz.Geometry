@@ -1,4 +1,116 @@
-# eppz! <sub>Geometry</sub>
+# eppz! `Geometry`
+
+* 1.0.1
+
+	+ Test scenes
+		+ `11. Polygon triangulation (1)`
+		+ `11. Polygon triangulation (2)`
+	+ `Polygon.UpdatePointPositionsWithSource()`
+		+ Update child transforms
+
+* 1.0.0
+
+	+ Triangulation
+		+ Resolved issue with inner triangles
+			+ Skip triangles if centroid not contained by polygon
+	+ `Source`
+		+ `Mesh`
+			+ Component to feed `MeshFilter` components
+		+ `Polygon` / `Segment`
+			+ Added `coordinates` to process `World` / `Local` coordinates
+
+* 0.9.7
+
+	+ Triangulation
+		+ Feature ready (`Triangle.Net` beta 4 hooked up)
+		+ API is not quiet done yet
+
+* 0.9.5
+
+	+ Namings
+		+ Model classes namespaced into `Model`
+		+ Source classes namespaced into `Source`
+			+ `Components.PolygonSource` is `Source.Polygon`
+			+ `Components.SegmentSource` is `Source.Segment`
+			+ `pointTransforms` is `points`
+		+ Updated controllers in `Scenes/Controllers`
+
+* 0.9.0
+
+	+ Added `TriangleNetAddOns`
+	+ Added `UnityEngineAdOns`	
+
+* 0.8.3
+
+	+ Added `ClipperAddOns`
+
+* 0.8.2
+
+	+ `PolygonSource`
+		+ Offset now can be manipulated at runtime
+			+ Maintain the original polygon, so offset polygon can be recalculated any time
+
+* 0.8.0
+
+	+ Test scenes
+		`8. Segment-Segment intersection point`
+		`9. Polygon offset`
+		`10. Multiple polygon centroid`
+	+ `ExtendedPolygonLineRenderer`
+		+ Winding and area hooks moved down here
+
+* 0.7.0
+
+	+ Test scenes
+		`4. Polygon-Segment containment`
+		`5. Polygon-Polygon containment`
+		`6. Vertex facing`
+		`7. Polygon area, Polygon winding`
+	+ `Segment` (with `SegmentLineRenderer`)
+		+ Can now draw normals
+		+ `normal` and `perpendicular` calculations moved up from `Edge`
+	+ `Polygon`
+		+ Fixed `area` (so `winding`) calculations
+
+* 0.6.0
+
+	+ Test scenes
+		+ `5. Polygon-Polygon containment (1)`
+		+ `5. Polygon-Polygon containment (2)`
+
+* 0.5.9
+
+	+ Polygon / segment sources now can be updates on `Update` or `LateUpdate`
+	+ Test scenes
+		+ Updated update modes
+
+* 0.5.8
+
+	+ Test scenes
+		+ `3. Polygon permiter-Point containment (Default)`
+		+ `4. Polygon-Segment containment`
+	+ Polygon / segment sources use world position (!) instead local
+	+ Line renderers use world positions as well (both segment and polygon)
+	+ Polygon and segment sources can be updated on `LateUpdate()`
+
+* 0.5.7
+
+	+ Test scene `2. Polygon permiter-Point containment (Precise)`
+
+* 0.5.6
+
+	+ Test scene `1. Polygon-Segment intersection`
+
+* 0.5.5
+
+	+ Only calculated winding direction
+		+ Removed option to define polygon winding
+		+ Removed distinct `_signedArea`
+			+ `area` is always (!) signed
+		+ Polygon calculations grouped together 
+		+ Renamed to simply `winding`
+	+ `Geometry`
+		+ `CentroidOfPolygons` use `area` directly (being always signed)
 
 * 0.5.1
 

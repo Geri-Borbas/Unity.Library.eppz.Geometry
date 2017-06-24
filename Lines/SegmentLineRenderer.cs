@@ -15,7 +15,7 @@ namespace EPPZ.Geometry.Lines
 
 
 	using EPPZ.Lines;
-	using Components;
+	using Model;
 
 
 	public class SegmentLineRenderer : GeometryLineRenderer
@@ -24,20 +24,30 @@ namespace EPPZ.Geometry.Lines
 
 		public Color lineColor;
 		public Color boundsColor;
-		private Segment segment;
+		public bool normals = false;
 		
+		Segment segment;
+		Source.Segment segmentSource;
 		
 		void Start()
 		{
 			// Model reference.
-			SegmentSource segmentSource_ = GetComponent<SegmentSource>();
-			segment = segmentSource_.segment;
+			segmentSource = GetComponent<Source.Segment>();
+			segment = segmentSource.segment;
 		}
 		
 		protected override void OnDraw()
 		{
-			DrawRect(segment.bounds, boundsColor);
-			DrawSegment(segment, lineColor);
+			if (segmentSource.coordinates == Source.Segment.Coordinates.World)
+			{
+				DrawRect(segment.bounds, boundsColor);
+				DrawSegment(segment, lineColor, normals);
+			}
+			else
+			{
+				DrawRectWithTransform(segment.bounds, boundsColor, this.transform);
+				DrawSegmentWithTransform(segment, lineColor, this.transform, normals);
+			}
 		}
 	}
 }

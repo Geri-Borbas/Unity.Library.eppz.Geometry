@@ -10,11 +10,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace EPPZ.Geometry
+namespace EPPZ.Geometry.Model
 {
-
-
-	using Components;
 
 
 	public class Segment
@@ -39,17 +36,65 @@ namespace EPPZ.Geometry
 			set { _b = value; }
 		}
 
+	#region Calculations
+
+		// If `alwaysCalculate` is on, every `normal` and `perpendicular` property access invokes recalculation of values based on actual topology.
+		public bool alwaysCalculate = true;
+
+		private Vector2 _normal;
+		public Vector2 normal
+		{
+			get
+			{
+				if (_normal == Vector2.zero || alwaysCalculate) { CalculateNormal(); } // Lazy calculation or force calculate on every access
+				return _normal;
+			}
+
+			set
+			{ _normal = value; }
+		}
+
+		public Vector2 _perpendicular;
+		public Vector2 perpendicular
+		{
+			get
+			{
+				if (_perpendicular == Vector2.zero || alwaysCalculate) { CalculatePerpendicular(); } // Lazy calculation or force calculate on every access
+				return _perpendicular;
+			}
+			
+			set
+			{ _perpendicular = value; }
+		}
+
+		public void CalculateNormal()
+		{
+			_normal = this.perpendicular.normalized;
+		}
+		
+		public void CalculatePerpendicular()
+		{
+			Vector2 translated = (this.b - this.a); // Translate to origin
+			_perpendicular = new Vector2( -translated.y, translated.x); // Rotate CCW
+		}
+
+	#endregion
+
 		
 	#region Factories
 		
-		public static Segment SegmentWithSource(SegmentSource segmentSource)
+		public static Segment SegmentWithSource(Source.Segment segmentSource)
 		{
-			return Segment.SegmentWithPointTransforms(segmentSource.pointTransforms);
+			return Segment.SegmentWithPointTransforms(segmentSource.points, segmentSource.coordinates);
 		}
 		
-		public static Segment SegmentWithPointTransforms(Transform[] pointTransforms) // Uses Transform.localPosition.xy()
+		public static Segment SegmentWithPointTransforms(Transform[] pointTransforms, Source.Segment.Coordinates coordinates = Source.Segment.Coordinates.World) // Uses Transform.localPosition.xy()
 		{
-			return Segment.SegmentWithPoints(pointTransforms[0].position, pointTransforms[1].position);
+			if (coordinates == Source.Segment.Coordinates.World)
+			{ return Segment.SegmentWithPoints(pointTransforms[0].position, pointTransforms[1].position); }
+
+			// Source.Segment.Coordinates.Local
+			return Segment.SegmentWithPoints(pointTransforms[0].localPosition, pointTransforms[1].localPosition);
 		}
 
 		public static Segment SegmentWithPoints(Vector2 a_, Vector2 b_)
@@ -65,15 +110,23 @@ namespace EPPZ.Geometry
 
 	#region Model updates
 		
-		public void UpdateWithSource(SegmentSource segmentSource) // Assuming unchanged point count
+		public void UpdateWithSource(Source.Segment segmentSource) // Assuming unchanged point count
 		{
-			UpdateWithTransforms(segmentSource.pointTransforms);
+			UpdateWithTransforms(segmentSource.points, segmentSource.coordinates);
 		}
 		
-		public void UpdateWithTransforms(Transform[] pointTransforms) // Assuming unchanged point count
+		public void UpdateWithTransforms(Transform[] pointTransforms, Source.Segment.Coordinates coordinates = Source.Segment.Coordinates.World) // Assuming unchanged point count
 		{
-			a = pointTransforms[0].position;
-			b = pointTransforms[1].position;
+			if (coordinates == Source.Segment.Coordinates.World)
+			{
+				a = pointTransforms[0].position;
+				b = pointTransforms[1].position;
+				return;
+			}
+
+ 			// Source.Segment.Coordinates.Local
+			a = pointTransforms[0].localPosition;
+			b = pointTransforms[1].localPosition;
 		}
 		
 	#endregion

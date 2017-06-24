@@ -5,27 +5,29 @@
 //  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-// #define ADDONS_ENABLED
-#if ADDONS_ENABLED
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using System.Linq;
-using ClipperLib;
 
-
-namespace EPPZ.Geometry
+namespace EPPZ.Geometry.AddOns
 {
 
 
+	using System.Linq;
+	using ClipperLib;
+
+
 	// Clipper definitions.
-	using Path = List<IntPoint>;
-	using Paths = List<List<IntPoint>>;
+	using Path = List<ClipperLib.IntPoint>;
+	using Paths = List<List<ClipperLib.IntPoint>>;
 
 
-	public static class Geometry_Clipper
+	using Model;
+
+
+	public static class ClipperAddOns
 	{
 
 
@@ -101,4 +103,3 @@ namespace EPPZ.Geometry
 
 	}
 }
-#endif

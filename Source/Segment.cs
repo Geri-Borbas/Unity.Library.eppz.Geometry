@@ -5,57 +5,53 @@
 //  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-#if EPPZ_LINES
 using UnityEngine;
 using System.Collections;
 
 
-namespace EPPZ.Geometry.Lines
+namespace EPPZ.Geometry.Source
 {
 
 
 	using Model;
 
 
-	public class PolygonLineRenderer : GeometryLineRenderer
+	public class Segment : MonoBehaviour
 	{
 
 
-		public Color lineColor;
-		public Color boundsColor;
-		public bool normals = false;
+		[UnityEngine.Serialization.FormerlySerializedAs("pointTransforms")]
+		public Transform[] points;
 
-		public Polygon polygon;
-		Source.Polygon polygonSource;		
-		
-		
-		void Start()
+		public enum UpdateMode { Awake, Update, LateUpdate };
+		public UpdateMode update = UpdateMode.Awake;	
+
+		public enum Coordinates { World, Local }
+		public Coordinates coordinates = Coordinates.World;
+
+		public Model.Segment segment;
+
+
+		void Awake()
 		{
-			// Model reference.
-			polygonSource = GetComponent<Source.Polygon>();
-			
-			if (polygonSource != null)
-			{ polygon = polygonSource.polygon; }
+			segment = Model.Segment.SegmentWithSource(this);
 		}
 
-		protected override void OnDraw()
+		void Update()
 		{
-			if (polygonSource != null)
-			{ polygon = polygonSource.polygon; }
+			if (update == UpdateMode.Update)
+			{ UpdateModel(); }
+		}
 
-			if (polygon == null) return; // Only having polygon
+		void LateUpdate()
+		{
+			if (update == UpdateMode.LateUpdate)
+			{ UpdateModel(); }
+		}
 
-			if (polygonSource.coordinates == Source.Polygon.Coordinates.World)
-			{
-				DrawRect(polygon.bounds, boundsColor);
-				DrawPolygon(polygon, lineColor, normals);
-			}
-			else
-			{
-				DrawRectWithTransform(polygon.bounds, boundsColor, this.transform);
-				DrawPolygonWithTransform(polygon, lineColor, this.transform, normals);
-			}
+		void UpdateModel()
+		{
+			segment.UpdateWithSource(this);
 		}
 	}
 }
-#endif

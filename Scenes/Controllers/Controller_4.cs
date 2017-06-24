@@ -18,44 +18,58 @@ namespace EPPZ.Geometry.Scenes
 
 
 	/// <summary>
-	/// 0. Polygon-Point containment
+	///  4. Polygon-Segment containment
 	/// </summary>
-	public class Controller_0 : MonoBehaviour
+	public class Controller_4 : MonoBehaviour
 	{
 
 
 		public Color defaultColor;
 		public Color passingColor;
 
-		public Source.Polygon polygonSource;
-		public GameObject[] pointObjects;
-		public PolygonLineRenderer polygonRenderer;
+		public Source.Polygon starSource;
+		public Source.Polygon squareSource;
+		public PolygonLineRenderer starRenderer;
+		public PolygonLineRenderer squareRenderer;
 
-		Polygon polygon { get { return polygonSource.polygon; } }
+		private Polygon star { get { return starSource.polygon; } }
+		private Polygon square { get { return squareSource.polygon; } }
 			
 
 		void Update()
-		{ RenderTestResult(PointContainmentTest()); }
+		{ RenderTestResult(IsSegmentsInsideTest()); }
 
-		bool PointContainmentTest()
+		bool IsSegmentsInsideTest()
 		{
-			bool containsAllPoints = true;
-			foreach (GameObject eachPointObject in pointObjects)
+			// Point containment.
+			bool pointContainment = true;
+			square.EnumeratePoints((Vector2 eachPoint) =>
 			{
-				Vector2 eachPoint = eachPointObject.transform.position.xy();
-				containsAllPoints &= polygon.ContainsPoint(eachPoint);
+				pointContainment &= star.ContainsPoint(eachPoint);
+			});
+
+			// Segment-Polygon intersecion, Segment endpoint-permiter contaimnent.
+			bool segmentIntersecting = false;
+			bool permiterContainsSegment = false;
+			foreach (Edge eachEdge in square.edges)
+			{
+				permiterContainsSegment |= star.PermiterContainsPoint(eachEdge.a) || star.PermiterContainsPoint(eachEdge.b);
+				segmentIntersecting |= star.IsIntersectingWithSegment(eachEdge);
 			}
-			return containsAllPoints;
+
+			// Polygon inside test.
+			bool polygonInside = pointContainment && segmentIntersecting == false && permiterContainsSegment == false;
+
+			return polygonInside;
 		}
-		
+
 		void RenderTestResult(bool testResult)
 		{
 			Color color = (testResult) ? passingColor : defaultColor;
 
 			// Layout colors.
-			polygonRenderer.lineColor = color;
-			foreach (GameObject eachPointObject in pointObjects)
-			{ eachPointObject.GetComponent<Renderer>().material.color = color; }
+			starRenderer.lineColor = color;
+			squareRenderer.lineColor = color;
 		}
 	}
 }

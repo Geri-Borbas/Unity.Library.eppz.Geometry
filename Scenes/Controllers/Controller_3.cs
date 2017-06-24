@@ -5,57 +5,52 @@
 //  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-#if EPPZ_LINES
 using UnityEngine;
 using System.Collections;
 
 
-namespace EPPZ.Geometry.Lines
+namespace EPPZ.Geometry.Scenes
 {
 
 
+	using Lines;
 	using Model;
 
 
-	public class PolygonLineRenderer : GeometryLineRenderer
+	/// <summary>
+	/// 3. Polygon permiter-Point containment (Default)
+	/// </summary>
+	public class Controller_3 : MonoBehaviour
 	{
 
 
-		public Color lineColor;
-		public Color boundsColor;
-		public bool normals = false;
+		public Color defaultColor;
+		public Color passingColor;
 
-		public Polygon polygon;
-		Source.Polygon polygonSource;		
-		
-		
-		void Start()
-		{
-			// Model reference.
-			polygonSource = GetComponent<Source.Polygon>();
+		public Source.Polygon polygonSource;
+		public GameObject pointSource;
+		public PolygonLineRenderer polygonRenderer;
+
+		private Polygon polygon { get { return polygonSource.polygon; } }
+		private Vector2 point  { get { return pointSource.transform.position.xy(); } }
 			
-			if (polygonSource != null)
-			{ polygon = polygonSource.polygon; }
-		}
 
-		protected override void OnDraw()
+		void Update()
+		{ RenderTestResult(PointContainmentTest()); }
+
+		bool PointContainmentTest()
 		{
-			if (polygonSource != null)
-			{ polygon = polygonSource.polygon; }
+			float accuracy = 0.1f;
+			return polygon.PermiterContainsPoint(point, accuracy);
+		}
+		
+		void RenderTestResult(bool testResult)
+		{
+			Color color = (testResult) ? passingColor : defaultColor;
 
-			if (polygon == null) return; // Only having polygon
-
-			if (polygonSource.coordinates == Source.Polygon.Coordinates.World)
-			{
-				DrawRect(polygon.bounds, boundsColor);
-				DrawPolygon(polygon, lineColor, normals);
-			}
-			else
-			{
-				DrawRectWithTransform(polygon.bounds, boundsColor, this.transform);
-				DrawPolygonWithTransform(polygon, lineColor, this.transform, normals);
-			}
+			// Layout colors.
+			polygonRenderer.lineColor = color;
+			pointSource.GetComponent<Renderer>().material.color = color;
 		}
 	}
 }
-#endif

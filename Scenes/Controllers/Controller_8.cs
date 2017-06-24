@@ -18,44 +18,57 @@ namespace EPPZ.Geometry.Scenes
 
 
 	/// <summary>
-	/// 0. Polygon-Point containment
+	/// 8. Segment-Segment intersection point
 	/// </summary>
-	public class Controller_0 : MonoBehaviour
+	public class Controller_8 : MonoBehaviour
 	{
 
 
 		public Color defaultColor;
 		public Color passingColor;
+		
+		public float accuracy = 0.0f;
 
-		public Source.Polygon polygonSource;
-		public GameObject[] pointObjects;
-		public PolygonLineRenderer polygonRenderer;
+		public Source.Segment segmentSourceA;
+		public Source.Segment segmentSourceB;
+		public SegmentLineRenderer segmentRendererA;
+		public SegmentLineRenderer segmentRendererB;
 
-		Polygon polygon { get { return polygonSource.polygon; } }
+		public GameObject intersectionPointObject;
+
+		private Segment segment_a { get { return segmentSourceA.segment; } }
+		private Segment segment_b { get { return segmentSourceB.segment; } }
 			
 
 		void Update()
-		{ RenderTestResult(PointContainmentTest()); }
+		{ RenderTestResult(SegmentIntersectionTest()); }
 
-		bool PointContainmentTest()
+		bool SegmentIntersectionTest()
 		{
-			bool containsAllPoints = true;
-			foreach (GameObject eachPointObject in pointObjects)
+			Vector2 intersectionPoint;
+			bool isIntersecting = segment_a.IntersectionWithSegmentWithAccuracy(segment_b, accuracy, out intersectionPoint);
+			if (isIntersecting)
 			{
-				Vector2 eachPoint = eachPointObject.transform.position.xy();
-				containsAllPoints &= polygon.ContainsPoint(eachPoint);
+				intersectionPointObject.transform.position = new Vector3(
+					intersectionPoint.x,
+					intersectionPoint.y,
+					intersectionPointObject.transform.position.z
+					); // Align point
 			}
-			return containsAllPoints;
+
+			return isIntersecting;
 		}
-		
+
 		void RenderTestResult(bool testResult)
 		{
 			Color color = (testResult) ? passingColor : defaultColor;
 
-			// Layout colors.
-			polygonRenderer.lineColor = color;
-			foreach (GameObject eachPointObject in pointObjects)
-			{ eachPointObject.GetComponent<Renderer>().material.color = color; }
+			// Layout color.
+			segmentRendererA.lineColor = color;
+			segmentRendererB.lineColor = color;
+
+			// Show / hide intersection point.
+			intersectionPointObject.GetComponent<Renderer>().enabled = testResult;
 		}
 	}
 }

@@ -6,18 +6,37 @@
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 
-namespace EPPZ.Geometry.Components
+namespace EPPZ.Geometry.Scenes
 {
-	
-	
-	public class PolygonInspector : MonoBehaviour
+
+
+	using Model;
+	using Lines;
+
+
+	/// <summary>
+	/// 10. Multiple polygon centroid
+	/// </summary>
+	public class Controller_10 : MonoBehaviour
 	{
 
+		public Transform centroid;
+		public Source.Polygon[] polygonSources;
+		List<Polygon> polygons = new List<Polygon>();
 
-		public Polygon polygon;
-		public int currentEdgeIndex = 0;
+
+		void Update()
+		{
+			// Collect polygons.
+			polygons.Clear();
+			foreach (Source.Polygon eachPolygonSource in polygonSources)
+			{ polygons.Add(eachPolygonSource.polygon); }
+
+			// Calculate compund centroid.
+			centroid.position = Geometry.CentroidOfPolygons(polygons.ToArray());
+		}
 	}
 }
