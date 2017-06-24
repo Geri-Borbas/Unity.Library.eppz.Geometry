@@ -16,6 +16,8 @@
 + [Multiple polygon centroid](#10-multiple-polygon-centroid)
 + [Polygon triangulation](#11-polygon-triangulation)
 
+![Unity.Library.eppz.Geometry.Model.Poygon.Mesh.Triangulation](https://github.com/eppz/Unity.Library.eppz.Geometry/raw/Documentation/Documentation/Unity.Library.eppz.Geometry.Model.Poygon.Mesh.Triangulation.gif)
+
 These test scenes are designed to experience / proof the **eppz! Geometry** library features. Hit play, then manipulate the geometry in Scene window while in game mode (watch out to move the points directly instead their parent container). Every relevant code is in the corresponding `Controller_#.cs`, so you can see **how to use the API**.
 
 You can define a polygon with simple `Vector2[]` array, but for sake of simplicity, test scenes uses some **polygon sourcing helper classes** ([`Components.PolygonSource`](../Components/PolygonSource.cs)) those take simple `GameObject` transforms as input. They also keep the polygon models updated on `GameObject` changes.
