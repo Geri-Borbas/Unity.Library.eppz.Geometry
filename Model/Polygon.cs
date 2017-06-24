@@ -68,7 +68,7 @@ namespace EPPZ.Geometry.Model
 		{
 			Polygon rootPolygon = Polygon.PolygonWithPointTransforms(polygonSource.points, polygonSource.coordinates);
 
-			// Collect sub-olygons if any.
+			// Collect sub-polygons if any.
 			foreach (Transform eachChildTransform in polygonSource.gameObject.transform)
 			{
 				GameObject eachChildGameObject = eachChildTransform.gameObject;
@@ -161,6 +161,17 @@ namespace EPPZ.Geometry.Model
 		public void UpdatePointPositionsWithSource(Source.Polygon polygonSource) // Assuming unchanged point count
 		{
 			UpdatePointPositionsWithTransforms(polygonSource.points, polygonSource.coordinates);
+
+			// Update sub-polygons if any.
+			foreach (Transform eachChildTransform in polygonSource.gameObject.transform)
+			{
+				GameObject eachChildGameObject = eachChildTransform.gameObject;
+                Source.Polygon eachChildPolygonSource = eachChildGameObject.GetComponent<Source.Polygon>();
+				if (eachChildPolygonSource != null)
+				{
+					eachChildPolygonSource.polygon.UpdatePointPositionsWithTransforms(eachChildPolygonSource.points, eachChildPolygonSource.coordinates);
+				}
+			}
 		}
 
 		public void UpdatePointPositionsWithTransforms(Transform[] pointTransforms, Source.Polygon.Coordinates coordinates) // Assuming unchanged point count

@@ -1,5 +1,13 @@
 # eppz! `Geometry`
 
+* 1.0.1
+
+	+ Test scenes
+		+ `11. Polygon triangulation (1)`
+		+ `11. Polygon triangulation (2)`
+	+ `Polygon.UpdatePointPositionsWithSource()`
+		+ Update child transforms
+
 * 1.0.0
 
 	+ Triangulation
