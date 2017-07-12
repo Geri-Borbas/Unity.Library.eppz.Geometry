@@ -1,4 +1,6 @@
-﻿Shader "eppz!/Geometry/Vertex color"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "eppz!/Geometry/Vertex color"
 {
 	
     Properties
@@ -49,7 +51,7 @@
 			    vertexOutput output;
 			    
 			    // Usual projection stuff.
-			    output.position = mul(UNITY_MATRIX_MVP, input.vertex);
+			    output.position = UnityObjectToClipPos(input.vertex);
  				output.color = input.color;
 			    output.uv = input.texcoord;
 			    

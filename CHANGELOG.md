@@ -1,5 +1,9 @@
 # eppz! `Geometry`
 
+* 1.0.11
+
+	+ Force text asset serialization
+
 * 1.0.1
 
 	+ Test scenes
