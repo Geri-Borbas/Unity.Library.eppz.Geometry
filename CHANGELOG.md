@@ -1,5 +1,9 @@
 # eppz! `Geometry`
 
+* 1.0.13
+
+	+ Included `meta` files to fix example scenes
+
 * 1.0.11
 
 	+ Force text asset serialization
